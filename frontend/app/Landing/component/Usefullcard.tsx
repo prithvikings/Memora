@@ -80,7 +80,7 @@ export const Usefullcard  = () => {
               damping: 30,
             }}
             className={cn(
-              "group text-left h-full flex flex-col z-10 bg-neutral-100 p-4 pb-8 rounded-2xl",
+              "group text-left h-full flex flex-col z-10 bg-neutral-100 p-4 pb-8 rounded-2xl shadow-sm border border-transparent shadow-black/10 ring-1 ring-black/5",
               active?.title === item.title && "z-50"
             )}
           >

@@ -199,3 +199,47 @@
     font-family: var(--font-geist-sans);
   }
 }
+/* =========================================
+   PREMIUM CUSTOM SCROLLBAR
+   Place at the absolute bottom of globals.css
+   ========================================= */
+/* 1. Nuke the default up/down arrows */
+::-webkit-scrollbar-button {
+  display: none !important;
+}
+
+/* 2. Set the overall width */
+::-webkit-scrollbar {
+  width: 12px !important; /* slightly wider to account for the transparent border */
+  background-color: transparent !important;
+}
+
+/* 3. Make the track completely invisible */
+::-webkit-scrollbar-track {
+  background-color: transparent !important;
+}
+
+/* 4. The Thumb (Floating Pill) */
+::-webkit-scrollbar-thumb {
+  background-color: rgba(156, 163, 175, 0.6) !important; 
+  border-radius: 20px !important;
+  /* This creates a transparent gap around the thumb so it doesn't touch the edges */
+  border: 3px solid transparent !important;
+  background-clip: padding-box !important;
+}
+
+/* 5. Hover state */
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(156, 163, 175, 0.9) !important;
+}
+
+/* 6. Hide the corner piece if horizontal scroll ever happens */
+::-webkit-scrollbar-corner {
+  background-color: transparent !important;
+}
+
+/* Firefox Fallback */
+html {
+  scrollbar-width: thin !important;
+  scrollbar-color: rgba(156, 163, 175, 0.6) transparent !important;
+}

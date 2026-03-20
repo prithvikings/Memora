@@ -1,14 +1,28 @@
-import React from 'react'
-import {Usefullcard} from './Usefullcard'
+"use client";
+import React from 'react';
+import { motion } from 'framer-motion';
+import { Usefullcard } from './Usefullcard';
 
 const UseFullSection = () => {
+  const customEase = [0.22, 1, 0.36, 1];
+
   return (
-    <div>
-        <h1 className='text-3xl font-poppins mt-26'>Your bookmarks. <br />
-Finally useful.</h1> 
-<Usefullcard />
-    </div>
+    <>
+    <motion.div
+      initial={{ opacity: 0, y: 40, filter: "blur(5px)" }}
+      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-100px" }} // Triggers when 100px away from view
+      transition={{ duration: 0.8, ease: customEase }}
+    >
+        <h1 className='text-5xl font-poppins mt-28 font-medium text-zinc-800 tracking-tight'>
+          Your bookmarks. <br />
+          Finally useful.
+        </h1> 
+      </motion.div>
+          <Usefullcard />
+          </>
+
   )
 }
 
-export default UseFullSection
+export default UseFullSection;

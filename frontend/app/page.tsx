@@ -34,7 +34,7 @@ const page = () => {
 
       {/* 3. REST OF THE PAGE */}
       <Powerful />
-      <div className='mt-4 text-3xl bg-neutral-100 w-full'>
+      <div className='mt-36 text-3xl bg-neutral-100 w-full'>
         <Cleaner />
       </div>
       <Built />

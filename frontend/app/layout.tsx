@@ -61,7 +61,7 @@ export default function RootLayout({
         geistMono.variable
       )}
     >
-      <body className="antialiased font-poppins">
+    <body className="antialiased font-poppins selection:bg-neutral-200 selection:text-black">
         {children}
       </body>
     </html>
