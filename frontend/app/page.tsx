@@ -14,30 +14,36 @@ import Footer from './Landing/component/Footer'
 const page = () => {
   return (
     <>
-    <div className="max-w-6xl mx-auto">
-      <Navbar />
-      <Hero />
-      <UseFullSection />
-      <Problem />
-      
-      
-    </div>
-    {/* <div className='mt-4 text-3xl bg-neutral-100 w-full'>
-      <Solution />
-    </div> */}
-    <Powerful />
-    <div className='mt-4 text-3xl bg-neutral-100 w-full'>
-      <Cleaner />
-    </div>
-    <Built />
-    <Join />
-    <CalltoAction />
-    <div className='bg-[#1C1C1C]'>
-    <Footer />
-      
-    </div>
-      </>
+      {/* 1. TOP SECTION */}
+      {/* Added 'relative' here so the absolute fade element stays pinned to this container */}
+      <div className="relative w-full bg-[url('/bg4.png')] bg-cover bg-bottom bg-no-repeat">
+        <div className="max-w-6xl mx-auto min-h-screen">
+          <Navbar />
+          <Hero />
+        </div>
+        
+        {/* THE FADE EFFECT: Placed at the very bottom of this wrapper */}
+        <div className="absolute bottom-0 left-0 w-full h-28 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+      </div>
 
+      {/* 2. MIDDLE SECTION: Standard background (no image) for the next components */}
+      <div className="max-w-6xl mx-auto">
+        <UseFullSection />
+        <Problem />
+      </div>
+
+      {/* 3. REST OF THE PAGE */}
+      <Powerful />
+      <div className='mt-4 text-3xl bg-neutral-100 w-full'>
+        <Cleaner />
+      </div>
+      <Built />
+      <Join />
+      <CalltoAction />
+      <div className='bg-[#1C1C1C]'>
+        <Footer />
+      </div>
+    </>
   )
 }
 
