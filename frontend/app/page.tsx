@@ -1,16 +1,16 @@
-import React from 'react'
-import Navbar from "./Landing/section/Navbar"
-import Hero from "./Landing/section/Hero"
-import UseFullSection from "./Landing/section/UseFullSection"
-import Problem from "./Landing/section/Problem"
-import Solution from './Landing/component/Solution'
-import Powerful from './Landing/section/Powerful'
-import Cleaner from './Landing/section/Cleaner'
-import Built from './Landing/section/Built'
-import Join from './Landing/section/Join'
-import CalltoAction from './Landing/section/CalltoAction'
-import Footer from './Landing/section/Footer'
-import SmoothScroll from './Landing/component/SmoothScroll'
+import React from "react";
+import Navbar from "./Landing/section/Navbar";
+import Hero from "./Landing/section/Hero";
+import UseFullSection from "./Landing/section/UseFullSection";
+import Problem from "./Landing/section/Problem";
+import Solution from "./Landing/component/Solution";
+import Powerful from "./Landing/section/Powerful";
+import Cleaner from "./Landing/section/Cleaner";
+import Built from "./Landing/section/Built";
+import Join from "./Landing/section/Join";
+import CalltoAction from "./Landing/section/CalltoAction";
+import Footer from "./Landing/section/Footer";
+import SmoothScroll from "./Landing/component/SmoothScroll";
 
 const page = () => {
   return (
@@ -22,9 +22,9 @@ const page = () => {
           <Navbar />
           <Hero />
         </div>
-        
+
         {/* THE FADE EFFECT: Placed at the very bottom of this wrapper */}
-        <div className="absolute bottom-0 left-0 w-full h-28 bg-gradient-to-t from-white to-transparent pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-full h-28 bg-linear-to-t from-white to-transparent pointer-events-none"></div>
       </div>
 
       {/* 2. MIDDLE SECTION: Standard background (no image) for the next components */}
@@ -35,17 +35,17 @@ const page = () => {
 
       {/* 3. REST OF THE PAGE */}
       <Powerful />
-      <div className='mt-36 text-3xl bg-neutral-100 w-full'>
+      <div className="mt-36 text-3xl bg-neutral-100 w-full">
         <Cleaner />
       </div>
       <Built />
       <Join />
       <CalltoAction />
-      <div className='bg-[#1C1C1C]'>
+      <div className="bg-[#1C1C1C]">
         <Footer />
       </div>
     </SmoothScroll>
-  )
-}
+  );
+};
 
-export default page
+export default page;

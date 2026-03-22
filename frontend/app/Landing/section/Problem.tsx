@@ -1,12 +1,12 @@
 "use client";
 import React from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'motion/react';
 import { Cards } from '../component/Cards'; // Assuming your Cards component is exported from here
 
 const Problem = () => {
-  const customEase = [0.22, 1, 0.36, 1];
+  const customEase = [0.22, 1, 0.36, 1] as const;
 
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     show: {
       opacity: 1,
@@ -16,7 +16,7 @@ const Problem = () => {
     },
   };
 
-  const itemVariants = {
+  const itemVariants: Variants = {
     hidden: { opacity: 0, y: 20, filter: "blur(4px)" },
     show: { 
       opacity: 1, 

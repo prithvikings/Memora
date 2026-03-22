@@ -6,7 +6,7 @@ const CalltoAction = () => {
     <div className="relative flex flex-col items-center justify-center w-full min-h-[70vh] py-32 bg-[url('/footerbg.png')] bg-cover bg-center bg-no-repeat overflow-hidden">
         
         {/* THE VIGNETTE: Fades from your footer color (#1C1C1C) up to transparent */}
-        <div className="absolute bottom-0 left-0 w-full h-4/5 bg-gradient-to-t from-[#1C1C1C] via-[#1C1C1C]/80 to-transparent pointer-events-none"></div>
+        <div className="absolute bottom-0 left-0 w-full h-4/5 bg-linear-to-t from-[#1C1C1C] via-[#1C1C1C]/80 to-transparent pointer-events-none"></div>
 
         {/* WRAPPER: relative z-10 ensures content stays above the vignette */}
         <div className="relative z-10 flex flex-col items-center text-center px-4">

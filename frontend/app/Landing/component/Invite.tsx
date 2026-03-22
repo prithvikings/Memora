@@ -6,7 +6,7 @@ import {
   useSpring,
   useTransform,
   useMotionTemplate,
-} from "framer-motion";
+} from "motion/react";
 
 export const Invite = () => {
   const ref = useRef<HTMLDivElement>(null);
@@ -20,12 +20,12 @@ export const Invite = () => {
   const rotateX = useTransform(
     mouseYSpring,
     [-0.5, 0.5],
-    ["-17.5deg", "17.5deg"]
+    ["-17.5deg", "17.5deg"],
   );
   const rotateY = useTransform(
     mouseXSpring,
     [-0.5, 0.5],
-    ["17.5deg", "-17.5deg"]
+    ["17.5deg", "-17.5deg"],
   );
 
   const translateX = useTransform(mouseXSpring, [-0.5, 0.5], ["-20px", "20px"]);
@@ -128,7 +128,7 @@ export const Invite = () => {
               </div>
             </div>
           </div>
-          <div className="p-4 mt-2 flex flex-shrink-0 items-center justify-between font-mono text-white">
+          <div className="p-4 mt-2 flex shrink-0 items-center justify-between font-mono text-white">
             <div className="text-xs">Comet Invitation</div>
             <div className="text-xs text-gray-300 opacity-50">#F7RA</div>
           </div>
