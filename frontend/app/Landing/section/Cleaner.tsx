@@ -1,6 +1,6 @@
 "use client";
 import React, { useRef, useState } from 'react';
-import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useMotionValueEvent, AnimatePresence } from 'motion/react';
 
 // Define the steps/features we are scrolling through
 const scrollFeatures = [

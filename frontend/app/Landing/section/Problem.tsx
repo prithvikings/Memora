@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Cards } from './Cards'; // Assuming your Cards component is exported from here
+import { Cards } from '../component/Cards'; // Assuming your Cards component is exported from here
 
 const Problem = () => {
   const customEase = [0.22, 1, 0.36, 1];

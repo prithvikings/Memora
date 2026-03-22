@@ -1,8 +1,8 @@
 "use client";
 import React from "react";
 import { motion } from "framer-motion";
-import Check from "./check";
-import Tick from "./tick";
+import Check from "../image/check";
+import Tick from "../image/tick";
 
 const Built = () => {
   const customEase = [0.22, 1, 0.36, 1];

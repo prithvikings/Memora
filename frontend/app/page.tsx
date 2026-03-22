@@ -1,19 +1,20 @@
 import React from 'react'
-import Navbar from "./Landing/component/Navbar"
-import Hero from "./Landing/component/Hero"
-import UseFullSection from "./Landing/component/UseFullSection"
-import Problem from "./Landing/component/Problem"
+import Navbar from "./Landing/section/Navbar"
+import Hero from "./Landing/section/Hero"
+import UseFullSection from "./Landing/section/UseFullSection"
+import Problem from "./Landing/section/Problem"
 import Solution from './Landing/component/Solution'
-import Powerful from './Landing/component/Powerful'
-import Cleaner from './Landing/component/Cleaner'
-import Built from './Landing/component/Built'
-import Join from './Landing/component/Join'
-import CalltoAction from './Landing/component/CalltoAction'
-import Footer from './Landing/component/Footer'
+import Powerful from './Landing/section/Powerful'
+import Cleaner from './Landing/section/Cleaner'
+import Built from './Landing/section/Built'
+import Join from './Landing/section/Join'
+import CalltoAction from './Landing/section/CalltoAction'
+import Footer from './Landing/section/Footer'
+import SmoothScroll from './Landing/component/SmoothScroll'
 
 const page = () => {
   return (
-    <>
+    <SmoothScroll>
       {/* 1. TOP SECTION */}
       {/* Added 'relative' here so the absolute fade element stays pinned to this container */}
       <div className="relative w-full bg-[url('/bg4.png')] bg-cover bg-bottom bg-no-repeat">
@@ -43,7 +44,7 @@ const page = () => {
       <div className='bg-[#1C1C1C]'>
         <Footer />
       </div>
-    </>
+    </SmoothScroll>
   )
 }
 

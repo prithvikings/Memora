@@ -4,11 +4,11 @@ import { motion } from "framer-motion";
 
 // Make sure your filenames match these imports! 
 // If your files are lowercase, just alias them with uppercase here:
-import Scroll from "./scroll";
-import Sparkles from "./sparkles";
-import Brain from "./brain";
-import HighVoltage from "./highvoltage";
-import Magnifying from "./magnifying";
+import Scroll from "../image/scroll";
+import Sparkles from "../image/sparkles";
+import Brain from "../image/brain";
+import HighVoltage from "../image/highvoltage";
+import Magnifying from "../image/magnifying";
 
 // 1. CHANGED: icon is now React.ReactNode so it accepts components, not just strings
 const Pill = ({ 

@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Usefullcard } from './Usefullcard';
+import { Usefullcard } from '../component/Usefullcard';
 
 const UseFullSection = () => {
   const customEase = [0.22, 1, 0.36, 1];
