@@ -1,0 +1,23 @@
+# Use the official lightweight Node.js 20 image
+FROM node:20-alpine
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy package.json and package-lock.json (if available) first
+# This is a Docker best practice to cache the npm install step!
+COPY package*.json ./
+
+# Install production dependencies cleanly
+# (If you don't have a package-lock.json yet, you can change this to `npm install`)
+RUN npm install
+
+# Copy the rest of your application code
+COPY . .
+
+# Expose the port your Express API runs on
+EXPOSE 3000
+
+# By default, start the API server
+# We can override this command in docker-compose or AWS to run the worker instead
+CMD ["npm", "start"]
