@@ -1,48 +1,7 @@
 version: "3.8"
 
 services:
-  # 1. The Express API Gateway
-  api:
-    build: .
-    container_name: bookmark_api
-    ports:
-      - "3000:3000"
-    environment:
-      - PORT=3000
-      - NODE_ENV=development
-      - MONGO_URI=mongodb://mongodb:27017/ai-bookmarks
-      - REDIS_URI=redis://redis:6379
-      - ELASTIC_NODE=http://elasticsearch:9200
-      - JWT_SECRET=super_secret_jwt_key_for_local_dev
-      - GEMINI_API_KEY=${GEMINI_API_KEY} # Pulls from your host machine's .env
-    depends_on:
-      mongodb:
-        condition: service_healthy
-      redis:
-        condition: service_started
-      elasticsearch:
-        condition: service_healthy
-
-  # 2. The BullMQ Worker (Uses the same build, just a different command!)
-  worker:
-    build: .
-    container_name: bookmark_worker
-    command: npm run dev:worker # Overrides the default CMD in Dockerfile
-    environment:
-      - NODE_ENV=development
-      - MONGO_URI=mongodb://mongodb:27017/ai-bookmarks
-      - REDIS_URI=redis://redis:6379
-      - ELASTIC_NODE=http://elasticsearch:9200
-      - GEMINI_API_KEY=${GEMINI_API_KEY}
-    depends_on:
-      mongodb:
-        condition: service_healthy
-      redis:
-        condition: service_started
-      elasticsearch:
-        condition: service_healthy
-
-  # 3. MongoDB Database
+  # 1. MongoDB Database
   mongodb:
     image: mongo:7.0
     container_name: bookmark_mongo
@@ -56,7 +15,7 @@ services:
       timeout: 5s
       retries: 5
 
-  # 4. Redis (For BullMQ)
+  # 2. Redis (For BullMQ)
   redis:
     image: redis:7-alpine
     container_name: bookmark_redis
@@ -65,13 +24,13 @@ services:
     volumes:
       - redis_data:/data
 
-  # 5. Elasticsearch (For Vector/Hybrid Search)
+  # 3. Elasticsearch (For Vector/Hybrid Search)
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:8.13.0
     container_name: bookmark_elasticsearch
     environment:
       - discovery.type=single-node
-      - xpack.security.enabled=false # Disabled for local dev ease; enable in prod!
+      - xpack.security.enabled=false 
       - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - "9200:9200"
@@ -83,7 +42,6 @@ services:
       timeout: 5s
       retries: 5
 
-# Persistent storage so your data doesn't wipe when you stop Docker
 volumes:
   mongo_data:
   redis_data:
