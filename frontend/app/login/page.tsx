@@ -31,7 +31,9 @@ export default function LoginPage() {
       );
     }
   };
-
+  if (loading || user) {
+    return <div className="min-h-screen bg-gray-50"></div>;
+  }
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-50">
       <div className="w-full max-w-md space-y-8 rounded-lg bg-white p-6 shadow-md">

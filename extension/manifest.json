@@ -1,0 +1,11 @@
+{
+  "manifest_version": 3,
+  "name": "Memora AI",
+  "version": "1.0",
+  "description": "Capture and auto-summarize bookmarks with AI.",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["activeTab"],
+  "host_permissions": ["http://localhost:5000/*"]
+}

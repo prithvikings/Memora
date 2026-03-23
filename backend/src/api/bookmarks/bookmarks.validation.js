@@ -4,7 +4,7 @@ import { z } from "zod";
 export const createBookmarkSchema = z.object({
   body: z.object({
     url: z.string().url("Must be a valid URL"),
-    collection_id: z.string().optional(),
+    collection_id: z.string().nullable().optional(),
     title: z.string().optional(),
     tags: z.array(z.string()).optional(),
   }),

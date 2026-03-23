@@ -21,7 +21,8 @@ const validate = (schema) => (req, res, next) => {
     next();
   } catch (error) {
     if (error instanceof ZodError) {
-      const errorMessage = error.errors
+      // Use error.issues instead of error.errors
+      const errorMessage = error.issues
         .map((e) => {
           const field = e.path[e.path.length - 1] || "input";
           return `${field}: ${e.message}`;
@@ -30,7 +31,6 @@ const validate = (schema) => (req, res, next) => {
 
       return next(new ApiError(400, errorMessage, true));
     }
-
     next(error);
   }
 };

@@ -12,7 +12,7 @@ interface Bookmark {
     short: string;
   };
   tags?: string[];
-  status: "processing" | "ready";
+  status: "processing" | "completed" | "failed";
   collection_id?: string | null;
 }
 
@@ -26,8 +26,8 @@ export default function DashboardHome() {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // 1. Initial Fetch
   useEffect(() => {
-    // Fetch both datasets concurrently
     Promise.all([api.get("/bookmarks"), api.get("/collections")])
       .then(([bookmarksRes, collectionsRes]) => {
         setBookmarks(bookmarksRes.data.data);
@@ -40,18 +40,30 @@ export default function DashboardHome() {
       });
   }, []);
 
+  // 2. Short-Polling for AI Processing
+  useEffect(() => {
+    const isProcessing = bookmarks.some((b) => b.status === "processing");
+    if (!isProcessing) return;
+
+    const interval = setInterval(async () => {
+      try {
+        const res = await api.get("/bookmarks");
+        setBookmarks(res.data.data);
+      } catch (err) {
+        console.error("Failed to poll for updates", err);
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [bookmarks]);
+
   const handleMoveBookmark = async (
     bookmarkId: string,
     newCollectionId: string,
   ) => {
     try {
-      // If the user selects "Root", newCollectionId will be empty string, send null to backend
       const targetId = newCollectionId === "" ? null : newCollectionId;
-
-      // Hit the PATCH route we built earlier
       await api.patch(`/bookmarks/${bookmarkId}`, { collection_id: targetId });
-
-      // Optimistically update the UI so the user doesn't have to wait for a refresh
       setBookmarks(
         bookmarks.map((b) =>
           b._id === bookmarkId ? { ...b, collection_id: targetId } : b,
@@ -97,7 +109,6 @@ export default function DashboardHome() {
                 </h3>
 
                 <div className="flex items-center gap-3 opacity-0 group-hover:opacity-100 transition-opacity">
-                  {/* Explicit Remove from Folder Button */}
                   {bookmark.collection_id && (
                     <button
                       onClick={() => handleMoveBookmark(bookmark._id, "")}
@@ -108,7 +119,6 @@ export default function DashboardHome() {
                     </button>
                   )}
 
-                  {/* Hard Delete Button */}
                   <button
                     onClick={() => handleDelete(bookmark._id)}
                     className="text-red-400 hover:text-red-600 font-bold"
@@ -135,7 +145,6 @@ export default function DashboardHome() {
               </div>
 
               <div className="flex flex-col gap-3 mt-auto pt-4 border-t border-gray-100">
-                {/* The Manual Move Dropdown */}
                 <select
                   value={bookmark.collection_id || ""}
                   onChange={(e) =>

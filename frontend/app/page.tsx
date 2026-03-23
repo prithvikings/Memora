@@ -23,6 +23,10 @@ const page = () => {
       router.push("/dashboard");
     }
   }, [user, loading, router]);
+
+  if (loading || user) {
+    return <div className="min-h-screen bg-white"></div>;
+  }
   return (
     <SmoothScroll>
       {/* 1. TOP SECTION */}

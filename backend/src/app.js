@@ -21,8 +21,25 @@ const app = express();
 app.use(helmet());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL || "http://localhost:3000", // No trailing slash
-    credentials: true, // This is mandatory for HttpOnly cookies to work
+    origin: function (origin, callback) {
+      // Allow requests with no origin (like curl requests)
+      if (!origin) return callback(null, true);
+
+      // Allow your Next.js frontend AND any Chrome Extension
+      if (
+        origin.startsWith("http://localhost") ||
+        origin.startsWith("chrome-extension://")
+      ) {
+        return callback(null, true);
+      }
+
+      // Reject everything else
+      return callback(
+        new Error("CORS policy violation: Origin not allowed"),
+        false,
+      );
+    },
+    credentials: true, // Still required for the HttpOnly cookies
   }),
 );
 app.use(express.json());

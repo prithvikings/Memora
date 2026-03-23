@@ -5,10 +5,10 @@ import { User } from "../../models/user.model.js";
 // Helper function to set the cookie
 const setTokenCookie = (res, token) => {
   res.cookie("token", token, {
-    httpOnly: true, // Prevents JavaScript from accessing the cookie (XSS protection)
-    secure: process.env.NODE_ENV === "production", // Requires HTTPS in production
-    sameSite: "strict", // CSRF protection
-    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+    httpOnly: true,
+    sameSite: "none", // CRITICAL: Allows the Chrome Extension to use the cookie
+    secure: true, // CRITICAL: Chrome requires this when sameSite is "none"
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days (or whatever your expiry is)
   });
 };
 
