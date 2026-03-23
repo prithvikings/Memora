@@ -1,13 +1,9 @@
 import type { Metadata } from "next";
-import {
-  Geist,
-  Geist_Mono,
-  JetBrains_Mono,
-  Poppins,
-} from "next/font/google";
+import { Geist, Geist_Mono, JetBrains_Mono, Poppins } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Instrument_Serif } from "next/font/google";
+import { AuthProvider } from "@/context/AuthContext";
 
 // Fonts
 
@@ -58,11 +54,11 @@ export default function RootLayout({
         instrument.variable,
         jetbrainsMono.variable,
         geistSans.variable,
-        geistMono.variable
+        geistMono.variable,
       )}
     >
-    <body className="antialiased font-poppins selection:bg-neutral-200 selection:text-black">
-        {children}
+      <body className="antialiased font-poppins selection:bg-neutral-200 selection:text-black">
+        <AuthProvider>{children}</AuthProvider>
       </body>
     </html>
   );

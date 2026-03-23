@@ -1,5 +1,6 @@
 // src/api/auth/auth.controller.js
 import { AuthService } from "../../services/auth.service.js";
+import { User } from "../../models/user.model.js";
 
 // Helper function to set the cookie
 const setTokenCookie = (res, token) => {
@@ -44,6 +45,23 @@ export const logout = async (req, res, next) => {
       httpOnly: true,
     });
     res.status(200).json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getMe = async (req, res, next) => {
+  try {
+    // req.user.id is already injected by the requireAuth middleware
+    const user = await User.findById(req.user.id).select("-password");
+
+    if (!user) {
+      return res
+        .status(404)
+        .json({ success: false, message: "User not found" });
+    }
+
+    res.status(200).json({ success: true, data: { user } });
   } catch (error) {
     next(error);
   }

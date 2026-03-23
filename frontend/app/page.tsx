@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import Navbar from "./Landing/section/Navbar";
 import Hero from "./Landing/section/Hero";
 import UseFullSection from "./Landing/section/UseFullSection";
@@ -11,8 +12,17 @@ import Join from "./Landing/section/Join";
 import CalltoAction from "./Landing/section/CalltoAction";
 import Footer from "./Landing/section/Footer";
 import SmoothScroll from "./Landing/component/SmoothScroll";
+import { useAuth } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
 
 const page = () => {
+  const { user, loading } = useAuth();
+  const router = useRouter();
+  useEffect(() => {
+    if (!loading && user) {
+      router.push("/dashboard");
+    }
+  }, [user, loading, router]);
   return (
     <SmoothScroll>
       {/* 1. TOP SECTION */}

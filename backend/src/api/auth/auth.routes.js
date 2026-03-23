@@ -1,8 +1,9 @@
 // src/api/auth/auth.routes.js
 import { Router } from "express";
-import { register, login, logout } from "./auth.controller.js";
+import { register, login, logout, getMe } from "./auth.controller.js";
 import validate from "../../middlewares/validate.middleware.js";
 import { registerSchema, loginSchema } from "./auth.validation.js";
+import { requireAuth } from "../../middlewares/auth.middleware.js";
 
 const router = Router();
 
@@ -10,5 +11,6 @@ const router = Router();
 router.post("/register", validate(registerSchema), register);
 router.post("/login", validate(loginSchema), login);
 router.post("/logout", logout);
+router.get("/me", requireAuth, getMe);
 
 export default router;
