@@ -12,19 +12,19 @@ export class AiService {
     const safeText = text.substring(0, 30000);
 
     const prompt = `
-      Analyze the following webpage content. 
-      1. Write a short 1-paragraph summary.
-      2. Write a 5-bullet point summary.
-      3. Extract the 3 most important key takeaways.
-      4. Generate up to 5 highly relevant, lowercase tags for categorization.
-      
-      Content:
-      ${safeText}
-    `;
+    Analyze the following webpage content. 
+    1. Write a short 1-paragraph summary.
+    2. Write a 5-bullet point summary.
+    3. Extract the 3 most important key takeaways.
+    4. Generate up to 5 highly relevant, lowercase tags for categorization.
+    
+    Content:
+    ${safeText}
+  `;
 
     try {
       const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
+        model: "gemini-3-flash-preview",
         contents: prompt,
         config: {
           // Force Gemini to output perfect JSON matching this schema
@@ -53,12 +53,16 @@ export class AiService {
     }
   }
 
+  // src/services/ai.service.js (Update this method)
+
   static async generateEmbedding(text) {
     try {
-      // Use the dedicated embedding model
       const response = await ai.models.embedContent({
-        model: "text-embedding-004",
-        contents: text.substring(0, 10000), // Embed the first part of the article
+        model: "gemini-embedding-001",
+        contents: text.substring(0, 10000),
+        config: {
+          outputDimensionality: 768, // Force Gemini to match your Elasticsearch index
+        },
       });
 
       return response.embeddings[0].values;

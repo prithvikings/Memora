@@ -10,15 +10,17 @@ const validate = (schema) => (req, res, next) => {
       params: req.params,
     });
 
+    // req.body is set by body-parser, so it can usually be reassigned
     if (validated.body) req.body = validated.body;
-    if (validated.query) req.query = validated.query;
-    if (validated.params) req.params = validated.params;
+
+    // In Express 5, req.query and req.params are getters.
+    // We must mutate the existing object instead of reassigning it.
+    if (validated.query) Object.assign(req.query, validated.query);
+    if (validated.params) Object.assign(req.params, validated.params);
 
     next();
   } catch (error) {
-    // Check if it's a validation error from Zod
     if (error instanceof ZodError) {
-      // Grab the last part of the path (e.g., 'email' or 'password') and the message
       const errorMessage = error.errors
         .map((e) => {
           const field = e.path[e.path.length - 1] || "input";
@@ -29,7 +31,6 @@ const validate = (schema) => (req, res, next) => {
       return next(new ApiError(400, errorMessage, true));
     }
 
-    // If it's a different kind of error, pass it to the global handler
     next(error);
   }
 };

@@ -6,6 +6,7 @@ import morgan from "morgan";
 import { env } from "./config/env.js";
 import bookmarkRoutes from "./api/bookmarks/bookmarks.routes.js";
 import collectionRoutes from "./api/collections/collections.routes.js";
+import searchRoutes from "./api/search/search.routes.js";
 import authRoutes from "./api/auth/auth.routes.js";
 import {
   errorConverter,
@@ -36,6 +37,7 @@ app.get("/health", (req, res) => {
 app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/bookmarks", bookmarkRoutes);
 app.use("/api/v1/collections", collectionRoutes);
+app.use("/api/v1/search", searchRoutes);
 
 // Basic 404 Handler - Passes to your custom error pipeline
 app.use((req, res, next) => {

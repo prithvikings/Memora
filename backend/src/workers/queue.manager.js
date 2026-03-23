@@ -1,13 +1,15 @@
-//backend/src/workers/queue.manager.js
+// src/workers/queue.manager.js
 import { Queue } from "bullmq";
 import { env } from "../config/env.js";
 
-// Create a new queue instance backed by our Redis connection
+const redisUrl = new URL(env.REDIS_URI);
+
 export const bookmarkQueue = new Queue("bookmark-processing", {
   connection: {
-    host: new URL(env.REDIS_URI).hostname,
-    port: new URL(env.REDIS_URI).port || 6379,
-    password: new URL(env.REDIS_URI).password || undefined,
+    host: redisUrl.hostname,
+    port: parseInt(redisUrl.port, 10) || 6379,
+    username: redisUrl.username || undefined,
+    password: redisUrl.password || undefined,
   },
   defaultJobOptions: {
     attempts: 3,
@@ -15,7 +17,7 @@ export const bookmarkQueue = new Queue("bookmark-processing", {
       type: "exponential",
       delay: 2000,
     },
-    removeOnComplete: true, // Keep Redis memory clean
-    removeOnFail: false, // Keep failed jobs for debugging
+    removeOnComplete: true,
+    removeOnFail: false, // Keep failed jobs in Redis for debugging
   },
 });

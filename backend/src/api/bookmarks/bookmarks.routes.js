@@ -1,14 +1,28 @@
-//backend/src/api/bookmarks/bookmarks.routes.js
+// src/api/bookmarks/bookmarks.routes.js
 import { Router } from "express";
-import { createBookmark, getBookmarks } from "./bookmarks.controller.js";
+import {
+  createBookmark,
+  getBookmarks,
+  deleteBookmark,
+  updateBookmark,
+} from "./bookmarks.controller.js";
 import { requireAuth } from "../../middlewares/auth.middleware.js";
+import validate from "../../middlewares/validate.middleware.js";
+import {
+  createBookmarkSchema,
+  getBookmarksSchema,
+  updateBookmarkSchema,
+} from "./bookmarks.validation.js";
 
 const router = Router();
 
-// Apply auth middleware to all bookmark routes
+// 1. Ensure user is logged in
 router.use(requireAuth);
 
-router.post("/", createBookmark);
-router.get("/", getBookmarks);
+// 2. Validate payload, then pass to controller
+router.post("/", validate(createBookmarkSchema), createBookmark);
+router.get("/", validate(getBookmarksSchema), getBookmarks);
+router.delete("/:id", deleteBookmark);
+router.patch("/:id", validate(updateBookmarkSchema), updateBookmark);
 
 export default router;

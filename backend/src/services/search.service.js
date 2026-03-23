@@ -96,4 +96,34 @@ export class SearchService {
       score: hit._score,
     }));
   }
+
+  static async deleteBookmark(bookmarkId) {
+    try {
+      await esClient.delete({
+        index: INDEX_NAME,
+        id: bookmarkId.toString(),
+      });
+    } catch (error) {
+      // If it's a 404, it was already missing from ES, which is fine
+      if (error.meta && error.meta.statusCode !== 404) {
+        console.error(`Failed to delete from Elasticsearch: ${error.message}`);
+      }
+    }
+  }
+
+  static async updateBookmark(bookmarkId, updateData) {
+    try {
+      await esClient.update({
+        index: INDEX_NAME,
+        id: bookmarkId.toString(),
+        doc: {
+          title: updateData.title,
+          tags: updateData.tags,
+          // Only update the fields that are actually provided
+        },
+      });
+    } catch (error) {
+      console.error(`Failed to update Elasticsearch: ${error.message}`);
+    }
+  }
 }
