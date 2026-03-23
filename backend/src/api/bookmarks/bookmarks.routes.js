@@ -1,3 +1,4 @@
+//backend/src/api/bookmarks/bookmarks.routes.js
 import { Router } from "express";
 import { createBookmark, getBookmarks } from "./bookmarks.controller.js";
 import { requireAuth } from "../../middlewares/auth.middleware.js";

@@ -1,3 +1,5 @@
+//backend/src/services/bookmark.service.js
+
 import { Bookmark } from "../models/bookmark.model.js";
 import { bookmarkQueue } from "../workers/queue.manager.js";
 

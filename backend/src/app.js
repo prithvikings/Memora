@@ -1,3 +1,4 @@
+// src/app.js
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -6,17 +7,24 @@ import { env } from "./config/env.js";
 import bookmarkRoutes from "./api/bookmarks/bookmarks.routes.js";
 import collectionRoutes from "./api/collections/collections.routes.js";
 import authRoutes from "./api/auth/auth.routes.js";
+import {
+  errorConverter,
+  errorHandler,
+} from "./middlewares/error.middleware.js";
+import ApiError from "./utils/api-error.js";
+import cookieParser from "cookie-parser";
 
 const app = express();
 
 // Global Middlewares
-app.use(helmet()); // Security headers
-app.use(cors({ origin: "*" })); // Configure properly for production later
-app.use(express.json()); // Parse JSON bodies
+app.use(helmet());
+app.use(cors({ origin: "*" }));
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
 if (env.NODE_ENV === "development") {
-  app.use(morgan("dev")); // HTTP request logger
+  app.use(morgan("dev"));
 }
 
 // Health check route
@@ -29,18 +37,13 @@ app.use("/api/v1/auth", authRoutes);
 app.use("/api/v1/bookmarks", bookmarkRoutes);
 app.use("/api/v1/collections", collectionRoutes);
 
-// Basic 404 Handler
+// Basic 404 Handler - Passes to your custom error pipeline
 app.use((req, res, next) => {
-  res.status(404).json({ error: "Endpoint not found" });
+  next(new ApiError(404, "Endpoint not found"));
 });
 
-// Global Error Handler
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).json({
-    error: err.message || "Internal Server Error",
-    ...(env.NODE_ENV === "development" && { stack: err.stack }),
-  });
-});
+// Global Error Handler Middleware
+app.use(errorConverter);
+app.use(errorHandler);
 
 export default app;

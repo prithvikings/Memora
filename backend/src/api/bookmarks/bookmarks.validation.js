@@ -1,3 +1,4 @@
+//backend/src/api/bookmarks/bookmarks.validation.js
 import { z } from "zod";
 
 export const createBookmarkSchema = z.object({

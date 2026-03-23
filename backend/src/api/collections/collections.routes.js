@@ -1,3 +1,4 @@
+//backend/src/api/collections/collections.routes.js
 import { Router } from "express";
 // import { create, getTree, remove } from './collections.controller.js';
 import { requireAuth } from "../../middlewares/auth.middleware.js";

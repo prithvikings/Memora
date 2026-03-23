@@ -1,3 +1,4 @@
+//backend/src/services/collection.service.js
 import { Collection } from "../models/collection.model.js";
 
 export class CollectionService {

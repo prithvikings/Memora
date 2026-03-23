@@ -1,10 +1,11 @@
-const authService = require('./auth.service');
-const bookmarkService = require('./bookmark.service');
-const aiService = require('./ai.service');
-const scraperService = require('./scraper.service');
-const searchService = require('./search.service');
+//backend/src/services/index.js
+import { authService } from "./auth.service.js";
+import { bookmarkService } from "./bookmark.service.js";
+import { aiService } from "./ai.service.js";
+import { scraperService } from "./scraper.service.js";
+import { searchService } from "./search.service.js";
 
-module.exports = {
+export {
   authService,
   bookmarkService,
   aiService,

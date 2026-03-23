@@ -1,3 +1,5 @@
+//backend/src/socket/socket.manager.js
+
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
 

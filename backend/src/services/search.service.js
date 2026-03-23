@@ -1,3 +1,4 @@
+//backend/src/services/search.service.js
 import { esClient } from "../config/elasticsearch.js";
 
 const INDEX_NAME = "bookmarks";

@@ -1,3 +1,5 @@
+//backend/src/workers/bookmark.processor.js
+
 import { Bookmark } from "../models/bookmark.model.js";
 import { ScraperService } from "../services/scraper.service.js";
 import { AiService } from "../services/ai.service.js";

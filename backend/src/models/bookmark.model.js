@@ -1,3 +1,5 @@
+//backend/src/models/bookmark.model.js
+
 import mongoose from "mongoose";
 
 const bookmarkSchema = new mongoose.Schema(

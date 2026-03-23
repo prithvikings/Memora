@@ -1,3 +1,4 @@
+//backend/src/workers/queue.manager.js
 import { Queue } from "bullmq";
 import { env } from "../config/env.js";
 

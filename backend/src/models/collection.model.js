@@ -1,3 +1,4 @@
+//backend/src/models/collection.model.js
 import mongoose from "mongoose";
 
 const collectionSchema = new mongoose.Schema(

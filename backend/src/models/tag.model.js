@@ -1,3 +1,4 @@
+//backend/src/models/tag.model.js
 import mongoose from "mongoose";
 
 const tagSchema = new mongoose.Schema({

@@ -1,3 +1,4 @@
+//backend/src/api/auth/auth.validation.js
 import { z } from "zod";
 
 export const registerSchema = z.object({

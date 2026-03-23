@@ -1,24 +1,25 @@
-const winston = require('winston');
+//backend/src/utils/logger.js
+import winston from "winston";
 
 const logger = winston.createLogger({
-  level: process.env.NODE_ENV === 'development' ? 'debug' : 'info',
+  level: process.env.NODE_ENV === "development" ? "debug" : "info",
   format: winston.format.combine(
     winston.format.timestamp({
-      format: 'YYYY-MM-DD HH:mm:ss'
+      format: "YYYY-MM-DD HH:mm:ss",
     }),
     winston.format.errors({ stack: true }),
     winston.format.splat(),
-    winston.format.json()
+    winston.format.json(),
   ),
-  defaultMeta: { service: 'ai-bookmark-backend' },
+  defaultMeta: { service: "ai-bookmark-backend" },
   transports: [
     new winston.transports.Console({
       format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.simple()
-      )
-    })
-  ]
+        winston.format.simple(),
+      ),
+    }),
+  ],
 });
 
-module.exports = logger;
+export default logger;

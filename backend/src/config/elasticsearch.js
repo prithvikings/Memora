@@ -1,3 +1,4 @@
+//backend/src/config/elasticsearch.js
 import { Client } from "@elastic/elasticsearch";
 import { env } from "./env.js";
 

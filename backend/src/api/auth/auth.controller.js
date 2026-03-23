@@ -1,43 +1,50 @@
+// src/api/auth/auth.controller.js
 import { AuthService } from "../../services/auth.service.js";
-import { registerSchema, loginSchema } from "./auth.validation.js";
+
+// Helper function to set the cookie
+const setTokenCookie = (res, token) => {
+  res.cookie("token", token, {
+    httpOnly: true, // Prevents JavaScript from accessing the cookie (XSS protection)
+    secure: process.env.NODE_ENV === "production", // Requires HTTPS in production
+    sameSite: "strict", // CSRF protection
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+};
 
 export const register = async (req, res, next) => {
   try {
-    // Validate request body
-    const validatedData = registerSchema.parse({ body: req.body });
-    const { email, password } = validatedData.body;
+    const { email, password } = req.body;
+    const { user, token } = await AuthService.register(email, password);
 
-    // Call business logic
-    const result = await AuthService.register(email, password);
+    setTokenCookie(res, token);
 
-    res.status(201).json({
-      success: true,
-      data: result,
-    });
+    res.status(201).json({ success: true, data: { user } }); // Removed token from JSON body
   } catch (error) {
-    // If it's a Zod validation error, format it
-    if (error.name === "ZodError") {
-      return res.status(400).json({ success: false, errors: error.errors });
-    }
-    next(error); // Pass to global error handler in app.js
+    next(error);
   }
 };
 
 export const login = async (req, res, next) => {
   try {
-    const validatedData = loginSchema.parse({ body: req.body });
-    const { email, password } = validatedData.body;
+    const { email, password } = req.body;
+    const { user, token } = await AuthService.login(email, password);
 
-    const result = await AuthService.login(email, password);
+    setTokenCookie(res, token);
 
-    res.status(200).json({
-      success: true,
-      data: result,
-    });
+    res.status(200).json({ success: true, data: { user } }); // Removed token from JSON body
   } catch (error) {
-    if (error.name === "ZodError") {
-      return res.status(400).json({ success: false, errors: error.errors });
-    }
+    next(error);
+  }
+};
+
+export const logout = async (req, res, next) => {
+  try {
+    res.cookie("token", "none", {
+      expires: new Date(Date.now() + 10 * 1000), // Expire instantly
+      httpOnly: true,
+    });
+    res.status(200).json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
     next(error);
   }
 };

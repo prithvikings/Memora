@@ -1,3 +1,4 @@
+//backend/src/worker.js
 import { Worker } from "bullmq";
 import IORedis from "ioredis";
 import { env } from "./config/env.js";

@@ -1,3 +1,4 @@
+//backend/src/api/search/search.controller.js
 import { SearchService } from "../../services/search.service.js";
 import { AiService } from "../../services/ai.service.js";
 import { Bookmark } from "../../models/bookmark.model.js";

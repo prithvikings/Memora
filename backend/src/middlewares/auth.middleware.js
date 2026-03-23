@@ -1,28 +1,26 @@
+// src/middlewares/auth.middleware.js
 import jwt from "jsonwebtoken";
 import { env } from "../config/env.js";
+import ApiError from "../utils/api-error.js";
 
 export const requireAuth = (req, res, next) => {
   try {
-    const authHeader = req.headers.authorization;
+    // Look for the token in cookies first, fallback to Auth header if needed
+    let token = req.cookies?.token;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      return res
-        .status(401)
-        .json({ success: false, error: "Authentication required" });
+    if (!token && req.headers.authorization?.startsWith("Bearer ")) {
+      token = req.headers.authorization.split(" ")[1];
     }
 
-    const token = authHeader.split(" ")[1];
+    if (!token) {
+      throw new ApiError(401, "Authentication required. No token provided.");
+    }
 
-    // Verify token
     const decoded = jwt.verify(token, env.JWT_SECRET);
-
-    // Attach user payload to request object
     req.user = { id: decoded.userId };
 
     next();
   } catch (error) {
-    return res
-      .status(401)
-      .json({ success: false, error: "Invalid or expired token" });
+    next(new ApiError(401, "Invalid or expired token"));
   }
 };

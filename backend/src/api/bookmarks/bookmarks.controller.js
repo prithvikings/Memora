@@ -1,6 +1,8 @@
+//backend/src/api/bookmarks/bookmarks.controller.js
 import { BookmarkService } from "../../services/bookmark.service.js";
 import { createBookmarkSchema } from "./bookmarks.validation.js";
 import { bookmarkQueue } from "../../workers/queue.manager.js";
+import { Bookmark } from "../../models/bookmark.model.js";
 
 export const bulkSyncBookmarks = async (req, res, next) => {
   try {

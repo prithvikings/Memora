@@ -1,3 +1,4 @@
+//backend/src/services/scraper.service.js
 import * as cheerio from "cheerio";
 
 export class ScraperService {
