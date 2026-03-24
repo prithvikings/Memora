@@ -50,7 +50,7 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex flex-col min-h-screen items-center justify-center bg-[#fcfcfc] relative font-mono pt-4">
+    <div className="flex flex-col min-h-screen items-center justify-center bg-[#fcfcfc] relative font-jetbrains pt-4">
       {/* Theme Toggle Top Right */}
       <button className="absolute top-6 right-6 text-gray-600 hover:text-gray-900 transition-colors">
         <Moon size={20} />
@@ -190,7 +190,7 @@ export default function RegisterPage() {
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full bg-sky-600 hover:bg-sky-700 text-white font-medium px-4 py-2.5 rounded-lg text-sm transition-colors mt-2 cursor-pointer"
+            className="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-medium px-4 py-2.5 rounded-lg text-sm transition-colors mt-2 cursor-pointer"
           >
             Create account
           </button>
@@ -200,7 +200,7 @@ export default function RegisterPage() {
         <div className="text-center">
           <button
             type="button"
-            className="text-xs text-gray-500 hover:text-sky-600 transition-colors cursor-pointer"
+            className="text-xs text-gray-500 hover:text-emerald-600 transition-colors cursor-pointer"
           >
             Use magic link instead
           </button>
@@ -230,7 +230,7 @@ export default function RegisterPage() {
             Already have an account?{" "}
             <Link
               href="/login"
-              className="text-sky-600 font-medium hover:underline cursor-pointer"
+              className="text-emerald-600 font-medium hover:underline cursor-pointer"
             >
               Sign in
             </Link>

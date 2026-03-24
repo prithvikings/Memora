@@ -13,9 +13,6 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Fonts (FIXED PROPERLY) */
-  --font-sans: var(--font-poppins);        /* default font */
-  --font-mono: var(--font-jetbrains);      /* code font */
 
   /* Extra font tokens (for utilities) */
   --font-poppins: var(--font-poppins);

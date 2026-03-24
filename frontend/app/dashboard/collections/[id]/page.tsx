@@ -6,7 +6,7 @@ import { api } from "@/lib/api";
 import {
   Trash,
   FolderMinus,
-  Globe,
+  Link as LinkIcon,
   CircleNotch,
   FolderOpen,
 } from "@phosphor-icons/react";
@@ -110,15 +110,18 @@ export default function CollectionPage({
 
   if (loading)
     return (
-      <div className="flex items-center gap-2 text-gray-500">
-        <CircleNotch size={20} className="animate-spin text-[#0a9a1a]" />
-        Loading collection...
+      <div className="flex h-full flex-col items-center justify-center gap-3 text-gray-400">
+        <CircleNotch size={28} className="animate-spin text-[#00a870]" />
+        <p className="text-sm font-medium animate-pulse">
+          Loading collection...
+        </p>
       </div>
     );
 
   if (error)
     return (
-      <div className="p-4 bg-red-50 text-red-600 rounded-lg border border-red-100">
+      <div className="max-w-5xl mx-auto p-4 bg-red-50 text-red-600 rounded-2xl border border-red-200 font-medium flex items-center gap-3">
+        <span className="bg-white p-2 rounded-xl shadow-sm">⚠️</span>
         {error}
       </div>
     );
@@ -127,113 +130,140 @@ export default function CollectionPage({
     collections.find((c) => c._id === collectionId)?.name || "Collection View";
 
   return (
-    <div className="max-w-7xl mx-auto">
-      <div className="flex items-center gap-3 mb-8">
-        <div className="p-2 bg-gray-100 rounded-lg">
-          <FolderOpen size={24} weight="duotone" className="text-gray-500" />
+    <div className="max-w-5xl mx-auto pb-16">
+      <div className="mb-10 flex items-center gap-4">
+        <div className="p-3 bg-gray-100 rounded-2xl">
+          <FolderOpen size={32} weight="fill" className="text-gray-400" />
         </div>
-        <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
-          {currentCollectionName}
-        </h1>
+        <div>
+          <h1 className="text-[32px] font-bold text-gray-900 tracking-tight leading-tight">
+            {currentCollectionName}
+          </h1>
+          <p className="text-gray-500 text-[15px]">
+            Organized insights and saved documents.
+          </p>
+        </div>
       </div>
 
       {bookmarks.length === 0 ? (
-        <div className="text-gray-500 bg-white border border-gray-200 p-8 rounded-2xl text-center shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)]">
-          This collection is empty.
+        <div className="flex flex-col items-center justify-center py-24 px-4 bg-white border border-gray-200 rounded-3xl text-center shadow-sm">
+          <div className="bg-gray-50 p-5 rounded-full mb-5">
+            <FolderOpen size={36} className="text-gray-400" />
+          </div>
+          <h3 className="text-xl font-bold text-gray-900 mb-2">
+            Folder is empty
+          </h3>
+          <p className="text-[15px] text-gray-500 max-w-md">
+            Move bookmarks into this collection to keep related research
+            together.
+          </p>
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="flex flex-col gap-5">
           {bookmarks.map((bookmark) => (
             <div
               key={bookmark._id}
-              className="bg-white border border-gray-200 rounded-2xl p-5 shadow-[0_2px_10px_-3px_rgba(6,81,237,0.05)] hover:shadow-md transition-all flex flex-col h-[320px] group"
+              className="bg-white border border-gray-100 rounded-3xl p-7 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] transition-shadow duration-300 flex flex-col group relative"
             >
-              {/* Card Header */}
-              <div className="flex justify-between items-start mb-3 gap-2">
+              <div className="flex justify-between items-start gap-8 mb-4">
                 <h3
-                  className="font-semibold text-[15px] text-gray-900 line-clamp-2 leading-snug"
+                  className="font-bold text-2xl text-gray-900 leading-snug group-hover:text-[#00a870] transition-colors"
                   title={bookmark.title}
                 >
-                  {bookmark.title || "Untitled"}
+                  {bookmark.title || "Untitled Document"}
                 </h3>
 
-                {/* Actions (Visible on Hover) */}
-                <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity bg-white pl-2">
-                  {bookmark.collection_id && (
-                    <button
-                      onClick={() => handleMoveBookmark(bookmark._id, "")}
-                      className="p-1.5 text-gray-400 hover:text-orange-500 hover:bg-orange-50 rounded-md transition-colors"
-                      title="Remove from folder"
-                    >
-                      <FolderMinus size={16} />
-                    </button>
-                  )}
-                  <button
-                    onClick={() => handleDelete(bookmark._id)}
-                    className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-md transition-colors"
-                    title="Delete permanently"
-                  >
-                    <Trash size={16} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Summary */}
-              <p className="text-sm text-gray-500 line-clamp-3 mb-4 flex-1 leading-relaxed">
-                {bookmark.summary?.short || "Waiting for AI processing..."}
-              </p>
-
-              {/* Tags */}
-              <div className="flex flex-wrap gap-1.5 mb-4 overflow-hidden h-[22px]">
-                {bookmark.tags?.slice(0, 3).map((tag) => (
+                <div className="flex flex-col items-end gap-2.5 min-w-[140px]">
                   <span
-                    key={tag}
-                    className="px-2 py-0.5 bg-gray-100 text-gray-600 text-[11px] font-medium rounded-md truncate max-w-[100px]"
+                    className={`flex items-center justify-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest w-fit ${
+                      bookmark.status === "processing"
+                        ? "bg-emerald-100/50 text-emerald-700"
+                        : "bg-emerald-50 text-[#00a870]"
+                    }`}
                   >
-                    {tag}
+                    {bookmark.status === "processing" && (
+                      <CircleNotch size={12} className="animate-spin" />
+                    )}
+                    {bookmark.status}
                   </span>
-                ))}
-              </div>
-
-              {/* Card Footer */}
-              <div className="flex flex-col gap-3 mt-auto pt-4 border-t border-gray-100">
-                <select
-                  value={bookmark.collection_id || ""}
-                  onChange={(e) =>
-                    handleMoveBookmark(bookmark._id, e.target.value)
-                  }
-                  className="w-full text-xs border border-gray-200 rounded-lg p-2 bg-gray-50 text-gray-700 outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-400 transition-all cursor-pointer appearance-none"
-                >
-                  <option value="">Unorganized (Root)</option>
-                  {collections.map((c) => (
-                    <option key={c._id} value={c._id}>
-                      {c.name}
-                    </option>
-                  ))}
-                </select>
-
-                <div className="flex items-center justify-between mt-1">
                   <a
                     href={bookmark.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-1 text-[11px] text-gray-400 hover:text-[#0a9a1a] truncate w-2/3 transition-colors font-medium"
+                    className="flex items-center gap-1.5 text-[12px] text-emerald-700 hover:text-emerald-900 truncate transition-colors font-medium group/link"
                   >
-                    <Globe size={12} />
-                    {bookmark.url.replace(/^https?:\/\//, "")}
+                    <LinkIcon
+                      size={14}
+                      weight="bold"
+                      className="text-emerald-600/70 group-hover/link:text-emerald-800"
+                    />
+                    {bookmark.url.replace(/^https?:\/\//, "").split("/")[0]}
                   </a>
-                  <span
-                    className={`flex items-center gap-1 px-2 py-1 rounded-md text-[10px] font-bold uppercase tracking-wider ${
-                      bookmark.status === "processing"
-                        ? "bg-amber-50 text-amber-600 border border-amber-100"
-                        : "bg-green-50 text-[#0a9a1a] border border-green-100"
-                    }`}
-                  >
-                    {bookmark.status === "processing" && (
-                      <CircleNotch size={10} className="animate-spin" />
-                    )}
-                    {bookmark.status}
+                </div>
+              </div>
+
+              <p className="text-[15px] text-gray-600 leading-relaxed mb-8 max-w-4xl">
+                {bookmark.summary?.short || (
+                  <span className="flex items-center gap-2 text-gray-400 italic">
+                    <CircleNotch size={14} className="animate-spin" />
+                    Analyzing content and generating abstract...
                   </span>
+                )}
+              </p>
+
+              <div className="flex items-end justify-between mt-auto">
+                <div className="flex flex-wrap gap-2">
+                  {bookmark.tags?.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-3 py-1.5 bg-[#f0f4f8] text-[#4a5f78] text-[11px] font-semibold rounded-full uppercase tracking-wider"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="relative group/folder">
+                    <div className="flex items-center gap-2 text-sm text-gray-600 font-medium bg-gray-50 hover:bg-gray-100 border border-gray-100 px-3 py-2 rounded-xl transition-colors cursor-pointer">
+                      <FolderOpen
+                        size={16}
+                        weight="fill"
+                        className="text-gray-400"
+                      />
+                      <select
+                        value={bookmark.collection_id || ""}
+                        onChange={(e) =>
+                          handleMoveBookmark(bookmark._id, e.target.value)
+                        }
+                        className="bg-transparent outline-none cursor-pointer appearance-none pr-4"
+                      >
+                        <option value="">Root Archive</option>
+                        {collections.map((c) => (
+                          <option key={c._id} value={c._id}>
+                            {c.name}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  {bookmark.collection_id && (
+                    <button
+                      onClick={() => handleMoveBookmark(bookmark._id, "")}
+                      className="p-2 text-gray-400 hover:text-amber-600 hover:bg-amber-50 rounded-xl transition-colors"
+                      title="Remove from folder"
+                    >
+                      <FolderMinus size={18} weight="bold" />
+                    </button>
+                  )}
+                  <button
+                    onClick={() => handleDelete(bookmark._id)}
+                    className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors"
+                    title="Delete permanently"
+                  >
+                    <Trash size={18} weight="bold" />
+                  </button>
                 </div>
               </div>
             </div>
