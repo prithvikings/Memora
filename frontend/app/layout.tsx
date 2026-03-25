@@ -4,8 +4,7 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Instrument_Serif } from "next/font/google";
 import { AuthProvider } from "@/context/AuthContext";
-
-// Fonts
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const instrument = Instrument_Serif({
   subsets: ["latin"],
@@ -13,6 +12,7 @@ const instrument = Instrument_Serif({
   style: ["normal", "italic"],
   variable: "--font-instrument",
 });
+
 const poppins = Poppins({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
@@ -34,13 +34,11 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
 });
 
-// Metadata
 export const metadata: Metadata = {
   title: "Memora | Turn Your Bookmarks Into an AI-Powered Knowledge Hub",
   description: "Turn Your Bookmarks Into an AI-Powered Knowledge Hub",
 };
 
-// Layout
 export default function RootLayout({
   children,
 }: {
@@ -58,7 +56,12 @@ export default function RootLayout({
       )}
     >
       <body className="antialiased font-poppins selection:bg-neutral-200 selection:text-black">
-        <AuthProvider>{children}</AuthProvider>
+        {/* CRITICAL: Ensure NEXT_PUBLIC_GOOGLE_CLIENT_ID is in your frontend .env.local */}
+        <GoogleOAuthProvider
+          clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID!}
+        >
+          <AuthProvider>{children}</AuthProvider>
+        </GoogleOAuthProvider>
       </body>
     </html>
   );

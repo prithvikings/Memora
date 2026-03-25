@@ -68,3 +68,42 @@ export const updateBookmark = async (req, res, next) => {
     next(error);
   }
 };
+
+export const getTrash = async (req, res, next) => {
+  try {
+    const trash = await BookmarkService.getTrash(req.user.id);
+    res.status(200).json({ success: true, data: trash });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const restoreBookmark = async (req, res, next) => {
+  try {
+    const restored = await BookmarkService.restoreBookmark(
+      req.user.id,
+      req.params.id,
+    );
+    res.status(200).json({ success: true, data: restored });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const hardDeleteBookmark = async (req, res, next) => {
+  try {
+    await BookmarkService.hardDeleteBookmark(req.user.id, req.params.id);
+    res.status(200).json({ success: true, message: "Permanently deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const emptyTrash = async (req, res, next) => {
+  try {
+    await BookmarkService.emptyTrash(req.user.id);
+    res.status(200).json({ success: true, message: "Trash emptied" });
+  } catch (error) {
+    next(error);
+  }
+};

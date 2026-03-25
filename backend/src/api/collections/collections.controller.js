@@ -1,5 +1,6 @@
 // src/api/collections/collections.controller.js
 import { CollectionService } from "../../services/collection.service.js";
+import { Collection } from "../../models/collection.model.js";
 
 export const createCollection = async (req, res, next) => {
   try {
@@ -49,6 +50,30 @@ export const removeCollection = async (req, res, next) => {
       success: true,
       message: "Collection deleted",
     });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const updateCollection = async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+    const collectionId = req.params.id;
+    const { name } = req.body;
+
+    const updatedCollection = await Collection.findOneAndUpdate(
+      { _id: collectionId, user_id: userId },
+      { name },
+      { new: true }, // Return the updated document
+    );
+
+    if (!updatedCollection) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Collection not found" });
+    }
+
+    res.status(200).json({ success: true, data: updatedCollection });
   } catch (error) {
     next(error);
   }

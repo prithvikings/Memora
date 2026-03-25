@@ -1,7 +1,7 @@
-// src/app/dashboard/recent/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { api } from "@/lib/api";
 import {
   ClockCounterClockwise,
   DotsThree,
@@ -11,88 +11,24 @@ import {
   FileText,
   YoutubeLogo,
   CalendarBlank,
+  CircleNotch,
+  Trash,
 } from "@phosphor-icons/react";
 
-// Mock data structured by time groups
-const recentActivity = [
-  {
-    group: "Today",
-    items: [
-      {
-        _id: "1",
-        title: "React 19 RC Release Notes",
-        url: "https://react.dev/blog",
-        domain: "react.dev",
-        time: "10:42 AM",
-        type: "article",
-        collection_name: "Frontend Architecture",
-        label: "Recent",
-      },
-      {
-        _id: "2",
-        title: "Building Fluid Interfaces with Framer Motion",
-        url: "https://youtube.com/watch",
-        domain: "youtube.com",
-        time: "09:15 AM",
-        type: "video",
-        collection_name: "Design Inspiration",
-        label: "Recent",
-      },
-    ],
-  },
-  {
-    group: "Yesterday",
-    items: [
-      {
-        _id: "3",
-        title: "Stripe API Reference - Subscriptions",
-        url: "https://stripe.com/docs/api",
-        domain: "stripe.com",
-        time: "4:30 PM",
-        type: "docs",
-        collection_name: "Finance & Taxes",
-        label: "Recent",
-      },
-      {
-        _id: "4",
-        title: "Linear's approach to issue tracking",
-        url: "https://linear.app/method",
-        domain: "linear.app",
-        time: "1:05 PM",
-        type: "article",
-        collection_name: "Startup Ideas",
-        label: "Recent",
-      },
-      {
-        _id: "5",
-        title: "Tailwind CSS v4.0 Alpha",
-        url: "https://tailwindcss.com/blog",
-        domain: "tailwindcss.com",
-        time: "10:00 AM",
-        type: "article",
-        collection_name: "Frontend Architecture",
-        label: "Recent",
-      },
-    ],
-  },
-  {
-    group: "Earlier this week",
-    items: [
-      {
-        _id: "6",
-        title: "Understanding Server Actions in Next.js",
-        url: "https://nextjs.org/docs",
-        domain: "nextjs.org",
-        time: "Mon, 2:15 PM",
-        type: "docs",
-        collection_name: "Frontend Architecture",
-        label: "Recent",
-      },
-    ],
-  },
-];
+interface Bookmark {
+  _id: string;
+  title?: string;
+  url: string;
+  created_at: string;
+  collection_id?: string | null;
+}
 
-// Helper component to render the correct icon based on content type
+interface Collection {
+  _id: string;
+  name: string;
+}
+
+// Helper to determine the content type icon based on URL
 const TypeIcon = ({ type }: { type: string }) => {
   switch (type) {
     case "video":
@@ -106,14 +42,134 @@ const TypeIcon = ({ type }: { type: string }) => {
 };
 
 export default function RecentPage() {
+  const [groupedActivity, setGroupedActivity] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
+
+  const fetchData = async () => {
+    try {
+      const [bookmarksRes, collectionsRes] = await Promise.all([
+        api.get("/bookmarks"),
+        api.get("/collections"),
+      ]);
+
+      const bookmarks: Bookmark[] = bookmarksRes.data.data;
+      const collections: Collection[] = collectionsRes.data.data;
+
+      // Time thresholds
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+
+      const earlierThisWeek = new Date(today);
+      earlierThisWeek.setDate(today.getDate() - 7);
+
+      const groups = {
+        Today: [] as any[],
+        Yesterday: [] as any[],
+        "Earlier this week": [] as any[],
+        Older: [] as any[],
+      };
+
+      bookmarks.forEach((b) => {
+        const date = new Date(b.created_at || Date.now());
+
+        // Find Collection Name
+        const collectionName =
+          collections.find((c) => c._id === b.collection_id)?.name ||
+          "Root Archive";
+
+        // Parse Domain & Type
+        let domain = "";
+        let type = "article";
+        try {
+          const urlObj = new URL(b.url);
+          domain = urlObj.hostname.replace("www.", "");
+          if (domain.includes("youtube.com") || domain.includes("vimeo.com"))
+            type = "video";
+          else if (domain.includes("docs") || domain.includes("github.com"))
+            type = "docs";
+        } catch (e) {
+          domain = b.url;
+        }
+
+        // Format Time
+        const timeStr = date.toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        const enrichedItem = {
+          ...b,
+          domain,
+          type,
+          collectionName,
+          timeStr,
+          date,
+        };
+
+        if (date >= today) groups.Today.push(enrichedItem);
+        else if (date >= yesterday) groups.Yesterday.push(enrichedItem);
+        else if (date >= earlierThisWeek)
+          groups["Earlier this week"].push(enrichedItem);
+        else groups.Older.push(enrichedItem);
+      });
+
+      // Filter out empty groups and set state
+      const finalGroups = Object.entries(groups)
+        .map(([group, items]) => ({ group, items }))
+        .filter((g) => g.items.length > 0);
+
+      setGroupedActivity(finalGroups);
+    } catch (err) {
+      console.error("Failed to load recent activity", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      const target = e.target as Element;
+      if (target && target.closest(".kebab-menu-container")) return;
+      setActiveMenu(null);
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleDelete = async (id: string, e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!confirm("Remove this bookmark?")) return;
+
+    try {
+      await api.delete(`/bookmarks/${id}`);
+      fetchData(); // Refresh the list to rebuild the groups
+    } catch (err) {
+      alert("Failed to delete bookmark");
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="flex h-[60vh] flex-col items-center justify-center gap-3 text-gray-400">
+        <CircleNotch size={28} className="animate-spin text-indigo-500" />
+        <p className="text-sm font-medium animate-pulse">Loading timeline...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-[1300px] mx-auto pb-16 font-poppins px-6">
-      {/* --- HEADER SECTION --- */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 py-6 border-b border-gray-100">
         <div>
-          {/* Subtle Indigo badge for Time/Activity */}
           <div className="bg-indigo-50 text-indigo-700 w-fit px-3 py-1 rounded-full mb-3 flex items-center justify-center border border-indigo-100">
             <p className="uppercase tracking-widest font-bold text-[10px] flex items-center gap-1.5">
               <ClockCounterClockwise size={12} weight="bold" />
@@ -130,9 +186,7 @@ export default function RecentPage() {
         </div>
       </div>
 
-      {/* --- TIMELINE CONTENT --- */}
-      {recentActivity.length === 0 ? (
-        /* EMPTY STATE */
+      {groupedActivity.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-32 px-4 bg-white border border-gray-100/70 rounded-[28px] text-center shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)]">
           <div className="relative mb-6">
             <div className="absolute inset-0 bg-indigo-100 rounded-full blur-xl opacity-40"></div>
@@ -154,9 +208,8 @@ export default function RecentPage() {
         </div>
       ) : (
         <div className="flex flex-col gap-10">
-          {recentActivity.map((group, groupIndex) => (
+          {groupedActivity.map((group, groupIndex) => (
             <div key={groupIndex} className="relative">
-              {/* Group Header (Today, Yesterday, etc.) */}
               <div className="flex items-center gap-3 mb-5">
                 <div className="bg-gray-100/80 p-1.5 rounded-lg text-gray-500">
                   <CalendarBlank size={16} weight="bold" />
@@ -167,16 +220,13 @@ export default function RecentPage() {
                 <div className="h-px bg-gray-100 flex-1 ml-4"></div>
               </div>
 
-              {/* Group Items List */}
               <div className="flex flex-col gap-3">
-                {group.items.map((item) => (
+                {group.items.map((item: any) => (
                   <div
                     key={item._id}
-                    className="group bg-white border border-gray-100/70 rounded-[20px] p-4 sm:p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:border-indigo-100/50 transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4"
+                    className="group bg-white border border-gray-100/70 rounded-[20px] p-4 sm:p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.02)] hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.06)] hover:-translate-y-0.5 hover:border-indigo-100/50 transition-all duration-300 flex flex-col sm:flex-row sm:items-center justify-between gap-4 relative"
                   >
-                    {/* Left: Icon, Title, Domain */}
                     <div className="flex items-center gap-4 min-w-0">
-                      {/* Dynamic Content Type Icon Box */}
                       <div className="hidden sm:flex shrink-0 p-3 bg-gray-50 rounded-2xl group-hover:scale-105 transition-transform duration-300">
                         <TypeIcon type={item.type} />
                       </div>
@@ -184,17 +234,17 @@ export default function RecentPage() {
                       <div className="min-w-0">
                         <div className="flex items-center gap-2 mb-1">
                           <span className="text-[12px] font-bold text-indigo-600/70 uppercase tracking-wider block sm:hidden">
-                            {item.time}
+                            {item.timeStr}
                           </span>
                         </div>
                         <a
                           href={item.url}
                           target="_blank"
                           rel="noreferrer"
-                          className="font-semibold text-[16px] text-gray-950 truncate block hover:text-indigo-600 transition-colors"
+                          className="font-semibold text-[16px] text-gray-950 truncate block hover:text-indigo-600 transition-colors line-clamp-1"
                           title={item.title}
                         >
-                          {item.title}
+                          {item.title || item.url}
                         </a>
                         <div className="flex items-center gap-3 mt-1 text-[13px] font-medium text-gray-400">
                           <span className="truncate">{item.domain}</span>
@@ -205,22 +255,18 @@ export default function RecentPage() {
                               weight="fill"
                               className="text-gray-300"
                             />
-                            {item.collection_name}
+                            {item.collectionName}
                           </span>
                         </div>
                       </div>
                     </div>
 
-                    {/* Right: Time & Actions */}
                     <div className="flex items-center justify-between sm:justify-end gap-4 shrink-0 mt-2 sm:mt-0 pt-3 sm:pt-0 border-t sm:border-0 border-gray-50">
-                      {/* Desktop Time */}
                       <span className="hidden sm:block text-[13px] font-bold text-gray-400 tracking-wide w-20 text-right">
-                        {item.time}
+                        {item.timeStr}
                       </span>
 
-                      {/* Quick Actions Container */}
                       <div className="flex items-center gap-1">
-                        {/* Jump Back In Button */}
                         <a
                           href={item.url}
                           target="_blank"
@@ -230,7 +276,6 @@ export default function RecentPage() {
                           Open <ArrowUpRight size={14} weight="bold" />
                         </a>
 
-                        {/* Kebab Menu */}
                         <div className="relative kebab-menu-container">
                           <button
                             onClick={(e) => {
@@ -249,17 +294,16 @@ export default function RecentPage() {
                             <DotsThree size={24} weight="bold" />
                           </button>
 
-                          {/* Dropdown */}
                           {activeMenu === item._id && (
                             <div
                               onClick={(e) => e.stopPropagation()}
                               className="absolute right-0 top-full mt-1 w-48 py-2 bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] z-50 overflow-hidden font-poppins animate-in fade-in slide-in-from-top-2 duration-200"
                             >
-                              <button className="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors">
-                                Move to Collection
-                              </button>
-                              <button className="w-full text-left px-4 py-2 text-[13px] font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors">
-                                Remove from History
+                              <button
+                                onClick={(e) => handleDelete(item._id, e)}
+                                className="w-full flex items-center gap-2.5 px-4 py-2.5 text-[13px] font-medium text-red-600 hover:bg-red-50 transition-colors"
+                              >
+                                <Trash size={16} /> Remove from History
                               </button>
                             </div>
                           )}

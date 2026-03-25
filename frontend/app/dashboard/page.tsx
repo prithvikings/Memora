@@ -1,4 +1,3 @@
-// src/app/dashboard/page.tsx
 "use client";
 
 import { useEffect, useState } from "react";
@@ -12,10 +11,11 @@ import {
   FolderOpen,
   DotsThree,
   Warning,
-  CaretUpDown,
   Check,
-  ArrowUpRight,
-  LinkSimpleIcon, // <-- Added ArrowUpRight for an alternative, modern link feel
+  LinkSimpleIcon,
+  Plus,
+  Star,
+  Archive as ArchiveIcon,
 } from "@phosphor-icons/react";
 
 interface Bookmark {
@@ -28,6 +28,7 @@ interface Bookmark {
   tags?: string[];
   status: "processing" | "completed" | "failed";
   collection_id?: string | null;
+  is_starred?: boolean;
 }
 
 interface Collection {
@@ -35,7 +36,6 @@ interface Collection {
   name: string;
 }
 
-// Defining the state structure for our custom modal
 type ModalAction = "delete" | "remove_folder" | null;
 interface ModalState {
   isOpen: boolean;
@@ -53,11 +53,15 @@ export default function DashboardHome() {
   const [collections, setCollections] = useState<Collection[]>([]);
   const [loading, setLoading] = useState(true);
 
+  // Ingestion State
+  const [newUrl, setNewUrl] = useState("");
+  const [isSubmittingUrl, setIsSubmittingUrl] = useState(false);
+  const [urlError, setUrlError] = useState("");
+
   // Track open menus
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
   const [activeFolderMenu, setActiveFolderMenu] = useState<string | null>(null);
 
-  // Modal State
   const [modal, setModal] = useState<ModalState>({
     isOpen: false,
     action: null,
@@ -70,7 +74,11 @@ export default function DashboardHome() {
   });
 
   useEffect(() => {
-    Promise.all([api.get("/bookmarks"), api.get("/collections")])
+    // Only fetch UNARCHIVED bookmarks for the main dashboard feed
+    Promise.all([
+      api.get("/bookmarks?is_archived=false"),
+      api.get("/collections"),
+    ])
       .then(([bookmarksRes, collectionsRes]) => {
         setBookmarks(bookmarksRes.data.data);
         setCollections(collectionsRes.data.data);
@@ -88,7 +96,7 @@ export default function DashboardHome() {
 
     const interval = setInterval(async () => {
       try {
-        const res = await api.get("/bookmarks");
+        const res = await api.get("/bookmarks?is_archived=false");
         setBookmarks(res.data.data);
       } catch (err) {
         console.error("Failed to poll for updates", err);
@@ -98,26 +106,39 @@ export default function DashboardHome() {
     return () => clearInterval(interval);
   }, [bookmarks]);
 
-  // Unified click-outside listener
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Element;
       if (target && !document.contains(target)) return;
 
-      // Close kebab menu if clicked outside
-      if (!target.closest(".kebab-menu-container")) {
-        setActiveMenu(null);
-      }
-
-      // Close folder menu if clicked outside
-      if (!target.closest(".folder-menu-container")) {
-        setActiveFolderMenu(null);
-      }
+      if (!target.closest(".kebab-menu-container")) setActiveMenu(null);
+      if (!target.closest(".folder-menu-container")) setActiveFolderMenu(null);
     };
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  const handleAddBookmark = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setUrlError("");
+    if (!newUrl.trim()) return;
+
+    let formattedUrl = newUrl.trim();
+    if (!/^https?:\/\//i.test(formattedUrl))
+      formattedUrl = `https://${formattedUrl}`;
+
+    setIsSubmittingUrl(true);
+    try {
+      const res = await api.post("/bookmarks", { url: formattedUrl });
+      setBookmarks((prev) => [res.data.data, ...prev]);
+      setNewUrl("");
+    } catch (err: any) {
+      setUrlError(err.response?.data?.message || "Failed to save bookmark.");
+    } finally {
+      setIsSubmittingUrl(false);
+    }
+  };
 
   const handleMoveBookmark = async (
     bookmarkId: string,
@@ -131,11 +152,43 @@ export default function DashboardHome() {
           b._id === bookmarkId ? { ...b, collection_id: targetId } : b,
         ),
       );
-      // Close the custom dropdown after selection
       setActiveFolderMenu(null);
     } catch (err) {
       alert("Failed to move bookmark");
-      console.error(err);
+    }
+  };
+
+  const handleToggleStar = async (
+    bookmarkId: string,
+    currentStatus: boolean,
+  ) => {
+    setBookmarks((prev) =>
+      prev.map((b) =>
+        b._id === bookmarkId ? { ...b, is_starred: !currentStatus } : b,
+      ),
+    );
+    try {
+      await api.patch(`/bookmarks/${bookmarkId}`, {
+        is_starred: !currentStatus,
+      });
+    } catch (err) {
+      setBookmarks((prev) =>
+        prev.map((b) =>
+          b._id === bookmarkId ? { ...b, is_starred: currentStatus } : b,
+        ),
+      );
+      alert("Failed to update favorite status");
+    }
+  };
+
+  // --- NEW ARCHIVE HANDLER ---
+  const handleArchiveBookmark = async (bookmarkId: string) => {
+    // Optimistic update: remove it from the dashboard feed immediately
+    setBookmarks((prev) => prev.filter((b) => b._id !== bookmarkId));
+    try {
+      await api.patch(`/bookmarks/${bookmarkId}`, { is_archived: true });
+    } catch (err) {
+      alert("Failed to archive bookmark");
     }
   };
 
@@ -186,7 +239,6 @@ export default function DashboardHome() {
         alert("Failed to delete");
       }
     }
-
     closeModal();
   };
 
@@ -217,6 +269,45 @@ export default function DashboardHome() {
           </p>
         </div>
 
+        <div className="mb-12">
+          <form onSubmit={handleAddBookmark} className="relative group">
+            <div className="absolute inset-y-0 left-5 flex items-center pointer-events-none">
+              <LinkIcon
+                size={20}
+                className="text-gray-400 group-focus-within:text-emerald-500 transition-colors"
+              />
+            </div>
+            <input
+              type="text"
+              placeholder="Paste a URL here to save and analyze..."
+              value={newUrl}
+              onChange={(e) => setNewUrl(e.target.value)}
+              disabled={isSubmittingUrl}
+              className="w-full pl-14 pr-32 py-4 bg-white border border-gray-200 shadow-sm hover:border-gray-300 focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 rounded-2xl text-[15px] font-medium text-gray-900 outline-none transition-all disabled:bg-gray-50 disabled:text-gray-400"
+            />
+            <div className="absolute inset-y-2 right-2 flex items-center">
+              <button
+                type="submit"
+                disabled={isSubmittingUrl || !newUrl.trim()}
+                className="flex items-center gap-2 px-5 py-2 bg-gray-950 hover:bg-gray-800 text-white rounded-xl text-[13px] font-semibold transition-all shadow-sm disabled:opacity-50 disabled:pointer-events-none active:scale-95"
+              >
+                {isSubmittingUrl ? (
+                  <CircleNotch size={16} className="animate-spin" />
+                ) : (
+                  <>
+                    <Plus size={16} weight="bold" /> Save
+                  </>
+                )}
+              </button>
+            </div>
+          </form>
+          {urlError && (
+            <p className="mt-3 text-sm text-red-600 font-medium px-2">
+              {urlError}
+            </p>
+          )}
+        </div>
+
         <div className="mb-4">
           <span className="text-[11px] font-semibold text-emerald-700 uppercase tracking-tight font-poppins">
             Recently Synced
@@ -232,14 +323,14 @@ export default function DashboardHome() {
               Your archive is empty
             </h3>
             <p className="text-[15px] text-gray-500 max-w-md">
-              Save articles, research papers, and tools. The AI will
-              automatically analyze and organize them for you.
+              Save articles, research papers, and tools using the input bar
+              above. The AI will automatically analyze and organize them for
+              you.
             </p>
           </div>
         ) : (
           <div className="flex flex-col gap-5">
             {bookmarks.map((bookmark) => {
-              // Find the active collection name for display
               const activeCollection = collections.find(
                 (c) => c._id === bookmark.collection_id,
               );
@@ -252,9 +343,7 @@ export default function DashboardHome() {
                   key={bookmark._id}
                   className="bg-white border border-gray-100 rounded-3xl p-7 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] transition-shadow duration-300 flex flex-col group relative"
                 >
-                  {/* Card Top: Title & Right Actions */}
                   <div className="flex justify-between items-start gap-8 mb-4">
-                    {/* CHANGED: Title is now an interactive anchor tag */}
                     <a
                       href={bookmark.url}
                       target="_blank"
@@ -267,19 +356,17 @@ export default function DashboardHome() {
 
                     <div className="flex items-center gap-3 shrink-0">
                       <span
-                        className={`flex items-center justify-center gap-1.5 px-3 py-1 rounded-full font-poppins text-[10px] font-semibold uppercase tracking-widest ${
-                          bookmark.status === "processing"
-                            ? "bg-emerald-100/50 text-emerald-700"
-                            : "bg-emerald-50 text-[#00a870]"
-                        }`}
+                        className={`flex items-center justify-center gap-1.5 px-3 py-1 rounded-full font-poppins text-[10px] font-semibold uppercase tracking-widest ${bookmark.status === "processing" ? "bg-emerald-100/50 text-emerald-700" : bookmark.status === "failed" ? "bg-red-50 text-red-600" : "bg-emerald-50 text-[#00a870]"}`}
                       >
                         {bookmark.status === "processing" && (
                           <CircleNotch size={12} className="animate-spin" />
                         )}
+                        {bookmark.status === "failed" && (
+                          <Warning size={12} weight="fill" />
+                        )}
                         {bookmark.status}
                       </span>
 
-                      {/* CHANGED: Replaced text URL with a larger, premium icon button */}
                       <a
                         href={bookmark.url}
                         target="_blank"
@@ -287,27 +374,29 @@ export default function DashboardHome() {
                         className="flex items-center justify-center p-2 rounded-full bg-emerald-50 text-emerald-600 hover:bg-emerald-100 hover:text-emerald-800 transition-colors"
                         title="Visit source website"
                       >
-                        {/* Note: ArrowUpRight also looks extremely modern here instead of LinkIcon */}
                         <LinkSimpleIcon size={18} weight="bold" />
                       </a>
                     </div>
                   </div>
 
-                  {/* Summary */}
                   <p className="text-sm text-gray-600 leading-relaxed mb-8 max-w-4xl font-poppins ">
                     {bookmark.summary?.short || (
-                      <span className="flex items-center gap-2 text-gray-400 italic">
-                        <CircleNotch size={14} className="animate-spin" />
-                        Analyzing content and generating abstract...
+                      <span
+                        className={`flex items-center gap-2 italic ${bookmark.status === "failed" ? "text-red-400" : "text-gray-400"}`}
+                      >
+                        {bookmark.status === "processing" && (
+                          <CircleNotch size={14} className="animate-spin" />
+                        )}
+                        {bookmark.status === "failed"
+                          ? "Failed to extract content."
+                          : "Analyzing content and generating abstract..."}
                       </span>
                     )}
                   </p>
 
                   <div className="h-0.5 w-full bg-gray-200 rounded-full mb-4"></div>
 
-                  {/* Card Footer: Tags & Controls */}
                   <div className="flex items-end justify-between mt-auto">
-                    {/* Tags */}
                     <div className="flex flex-wrap gap-2">
                       {bookmark.tags?.map((tag) => (
                         <span
@@ -319,9 +408,22 @@ export default function DashboardHome() {
                       ))}
                     </div>
 
-                    {/* Controls */}
                     <div className="flex items-center gap-2 relative">
-                      {/* CUSTOM FOLDER DROPDOWN */}
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleToggleStar(bookmark._id, !!bookmark.is_starred);
+                        }}
+                        className={`p-2 rounded-xl transition-all ${bookmark.is_starred ? "text-amber-500 bg-amber-50 hover:bg-amber-100" : "text-gray-400 bg-gray-100 hover:text-amber-500 hover:bg-amber-50"}`}
+                        title={bookmark.is_starred ? "Unstar" : "Star"}
+                      >
+                        <Star
+                          size={20}
+                          weight={bookmark.is_starred ? "fill" : "bold"}
+                        />
+                      </button>
+
                       <div className="relative folder-menu-container">
                         <button
                           onClick={(e) => {
@@ -332,13 +434,9 @@ export default function DashboardHome() {
                                 ? null
                                 : bookmark._id,
                             );
-                            setActiveMenu(null); // Close kebab if open
+                            setActiveMenu(null);
                           }}
-                          className={`flex items-center gap-2 text-sm font-medium border px-3 py-2 rounded-xl transition-all ${
-                            activeFolderMenu === bookmark._id
-                              ? "bg-white border-gray-300 shadow-sm text-gray-900"
-                              : "bg-gray-100 border-gray-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900"
-                          }`}
+                          className={`flex items-center gap-2 text-sm font-medium border px-3 py-2 rounded-xl transition-all ${activeFolderMenu === bookmark._id ? "bg-white border-gray-300 shadow-sm text-gray-900" : "bg-gray-100 border-gray-100 text-gray-600 hover:bg-gray-100 hover:text-gray-900"}`}
                         >
                           <FolderOpen
                             size={16}
@@ -354,7 +452,6 @@ export default function DashboardHome() {
                           </span>
                         </button>
 
-                        {/* Folder Menu List */}
                         {activeFolderMenu === bookmark._id && (
                           <div
                             onClick={(e) => e.stopPropagation()}
@@ -365,7 +462,6 @@ export default function DashboardHome() {
                                 Move to...
                               </span>
                             </div>
-
                             <div className="max-h-[200px] overflow-y-auto scrollbar-hide">
                               <button
                                 onClick={() =>
@@ -382,7 +478,6 @@ export default function DashboardHome() {
                                   />
                                 )}
                               </button>
-
                               {collections.map((c) => (
                                 <button
                                   key={c._id}
@@ -413,7 +508,6 @@ export default function DashboardHome() {
                         )}
                       </div>
 
-                      {/* Kebab Menu Trigger */}
                       <div className="relative kebab-menu-container">
                         <button
                           onClick={(e) => {
@@ -422,41 +516,46 @@ export default function DashboardHome() {
                             setActiveMenu(
                               activeMenu === bookmark._id ? null : bookmark._id,
                             );
-                            setActiveFolderMenu(null); // Close folder menu if open
+                            setActiveFolderMenu(null);
                           }}
-                          className={`p-2 rounded-xl transition-all relative z-10 ${
-                            activeMenu === bookmark._id
-                              ? "bg-gray-100 text-gray-900"
-                              : "text-gray-600 bg-gray-100 hover:text-gray-900 hover:bg-gray-100"
-                          }`}
+                          className={`p-2 rounded-xl transition-all relative z-10 ${activeMenu === bookmark._id ? "bg-gray-100 text-gray-900" : "text-gray-600 bg-gray-100 hover:text-gray-900 hover:bg-gray-100"}`}
                           aria-label="More options"
                         >
                           <DotsThree size={24} weight="bold" />
                         </button>
 
-                        {/* Dropdown Menu */}
                         {activeMenu === bookmark._id && (
                           <div
                             onClick={(e) => e.stopPropagation()}
                             className="absolute right-0 top-full mt-1 w-56 px-2 py-4 bg-white border border-gray-100 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] z-50 overflow-hidden font-poppins origin-top-right animate-in fade-in slide-in-from-top-2 duration-200"
                           >
+                            {/* --- NEW ARCHIVE BUTTON --- */}
+                            <button
+                              onClick={() =>
+                                handleArchiveBookmark(bookmark._id)
+                              }
+                              className="w-full text-left px-4 py-2.5 text-[13px] font-medium text-gray-600 hover:bg-indigo-50 hover:text-indigo-700 transition-colors flex items-center gap-2.5 hover:rounded-full"
+                            >
+                              <ArchiveIcon size={16} weight="bold" /> Send to
+                              Archive
+                            </button>
+
                             {bookmark.collection_id && (
                               <button
                                 onClick={() =>
                                   promptRemoveFromFolder(bookmark._id)
                                 }
-                                className="w-full text-left px-4 py-2.5 text-[13px] font-medium text-gray-600 hover:bg-amber-50 hover:text-amber-700 transition-colors flex items-center gap-2.5 hover:rounded-full"
+                                className="w-full text-left px-4 py-2.5 text-[13px] font-medium text-gray-600 hover:bg-amber-50 hover:text-amber-700 transition-colors flex items-center gap-2.5 hover:rounded-full mt-1 border-t border-gray-50 pt-3"
                               >
-                                <FolderMinus size={16} weight="bold" />
-                                Remove from folder
+                                <FolderMinus size={16} weight="bold" /> Remove
+                                from folder
                               </button>
                             )}
                             <button
                               onClick={() => promptDelete(bookmark._id)}
-                              className="w-full text-left px-4 py-2.5 text-[13px] font-medium text-gray-600 hover:bg-red-50 hover:text-red-700 transition-colors flex items-center gap-2.5 hover:rounded-full"
+                              className={`w-full text-left px-4 py-2.5 text-[13px] font-medium text-gray-600 hover:bg-red-50 hover:text-red-700 transition-colors flex items-center gap-2.5 hover:rounded-full ${!bookmark.collection_id ? "mt-1 border-t border-gray-50 pt-3" : ""}`}
                             >
-                              <Trash size={16} weight="bold" />
-                              Delete permanently
+                              <Trash size={16} weight="bold" /> Delete
                             </button>
                           </div>
                         )}
@@ -470,14 +569,12 @@ export default function DashboardHome() {
         )}
       </div>
 
-      {/* --- CUSTOM GLOBAL MODAL --- */}
       {modal.isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div
             className="absolute inset-0 bg-gray-900/30 backdrop-blur-sm animate-in fade-in duration-200"
             onClick={closeModal}
           ></div>
-
           <div className="relative bg-white w-full max-w-sm rounded-[24px] p-6 shadow-2xl animate-in zoom-in-95 fade-in duration-200 font-poppins">
             <div className="flex flex-col items-center text-center">
               <div className={`p-4 rounded-full mb-4 ${modal.iconStyle}`}>
@@ -489,7 +586,6 @@ export default function DashboardHome() {
               <p className="text-[14px] text-gray-500 leading-relaxed mb-8">
                 {modal.message}
               </p>
-
               <div className="flex w-full gap-3">
                 <button
                   onClick={closeModal}

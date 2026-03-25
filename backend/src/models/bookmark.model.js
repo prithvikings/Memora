@@ -38,6 +38,9 @@ const bookmarkSchema = new mongoose.Schema(
       enum: ["processing", "completed", "failed"],
       default: "processing",
     },
+    deleted_at: { type: Date, default: null },
+    is_starred: { type: Boolean, default: false },
+    is_archived: { type: Boolean, default: false },
   },
   {
     timestamps: { createdAt: "created_at", updatedAt: "updated_at" },

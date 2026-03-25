@@ -14,6 +14,7 @@ const envSchema = z.object({
   ELASTIC_NODE: z.string().url(),
   GEMINI_API_KEY: z.string().min(1),
   JWT_SECRET: z.string().min(10),
+  GOOGLE_CLIENT_ID: z.string().min(1, "Google Client ID is required"),
 });
 
 const _env = envSchema.safeParse(process.env);

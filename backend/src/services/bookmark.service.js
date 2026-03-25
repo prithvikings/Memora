@@ -37,38 +37,81 @@ export class BookmarkService {
   }
 
   static async getUserBookmarks(userId, queryParams = {}) {
-    const filter = { user_id: userId };
+    const filter = { user_id: userId, deleted_at: null };
 
-    // If a specific collection is requested
     if (queryParams.collection_id) {
       filter.collection_id = queryParams.collection_id;
-    }
-    // If the frontend explicitly wants bookmarks NOT in any collection
-    else if (queryParams.root === "true") {
+    } else if (queryParams.root === "true") {
       filter.collection_id = null;
     }
 
-    // Return the results, sorted newest first
+    // ADD THIS BLOCK
+    if (queryParams.is_starred === "true") {
+      filter.is_starred = true;
+    }
+    if (queryParams.is_archived === "true") {
+      filter.is_archived = true;
+    }
     return await Bookmark.find(filter).sort({ created_at: -1 }).limit(50);
   }
 
+  // 1. Soft Delete (Moves to Trash)
   static async deleteBookmark(userId, bookmarkId) {
+    const bookmark = await Bookmark.findOneAndUpdate(
+      { _id: bookmarkId, user_id: userId, deleted_at: null },
+      { $set: { deleted_at: new Date() } },
+      { new: true },
+    );
+
+    if (!bookmark) throw new ApiError(404, "Bookmark not found");
+
+    // Remove from Elasticsearch so it doesn't show up in global searches
+    await SearchService.deleteBookmark(bookmarkId);
+
+    return bookmark;
+  }
+
+  // 2. Fetch Trash
+  static async getTrash(userId) {
+    // Return items where deleted_at is NOT null
+    return await Bookmark.find({
+      user_id: userId,
+      deleted_at: { $ne: null },
+    }).sort({ deleted_at: -1 });
+  }
+
+  // 3. Restore from Trash
+  static async restoreBookmark(userId, bookmarkId) {
+    const bookmark = await Bookmark.findOneAndUpdate(
+      { _id: bookmarkId, user_id: userId },
+      { $set: { deleted_at: null } },
+      { new: true },
+    );
+
+    if (!bookmark) throw new ApiError(404, "Bookmark not found");
+
+    // Put it back in Elasticsearch
+    await SearchService.indexBookmark(bookmark);
+
+    return bookmark;
+  }
+
+  // 4. Hard Delete (Permanent)
+  static async hardDeleteBookmark(userId, bookmarkId) {
     const bookmark = await Bookmark.findOneAndDelete({
       _id: bookmarkId,
       user_id: userId,
     });
-
-    if (!bookmark) {
-      throw new ApiError(
-        404,
-        "Bookmark not found or you do not have permission to delete it",
-      );
-    }
-
-    // Remove from Elasticsearch
-    await SearchService.deleteBookmark(bookmarkId);
-
+    if (!bookmark) throw new ApiError(404, "Bookmark not found");
     return bookmark;
+  }
+
+  // 5. Empty Trash
+  static async emptyTrash(userId) {
+    return await Bookmark.deleteMany({
+      user_id: userId,
+      deleted_at: { $ne: null },
+    });
   }
 
   static async updateBookmark(userId, bookmarkId, updateData) {

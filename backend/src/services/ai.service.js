@@ -53,8 +53,6 @@ export class AiService {
     }
   }
 
-  // src/services/ai.service.js (Update this method)
-
   static async generateEmbedding(text) {
     try {
       const response = await ai.models.embedContent({

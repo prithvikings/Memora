@@ -14,6 +14,8 @@ export const getBookmarksSchema = z.object({
   query: z.object({
     collection_id: z.string().optional(),
     root: z.enum(["true", "false"]).optional(),
+    is_starred: z.enum(["true", "false"]).optional(),
+    is_archived: z.enum(["true", "false"]).optional(),
   }),
 });
 
@@ -23,5 +25,7 @@ export const updateBookmarkSchema = z.object({
     description: z.string().optional(),
     collection_id: z.string().nullable().optional(), // Null allows moving it back to the root folder
     tags: z.array(z.string()).optional(),
+    is_starred: z.boolean().optional(),
+    is_archived: z.boolean().optional(),
   }),
 });

@@ -1,4 +1,4 @@
-//backend/src/services/collection.service.js
+import mongoose from "mongoose";
 import { Collection } from "../models/collection.model.js";
 
 export class CollectionService {
@@ -21,14 +21,32 @@ export class CollectionService {
   }
 
   static async getUserTree(userId) {
-    // Fetches all collections for a user and returns them
-    // (In the frontend, you will reconstruct the nested tree using parent_id)
-    return await Collection.find({ user_id: userId }).lean();
+    // We must use an aggregation pipeline to count the bookmarks inside each collection
+    return await Collection.aggregate([
+      { $match: { user_id: new mongoose.Types.ObjectId(userId) } },
+      {
+        $lookup: {
+          from: "bookmarks", // MongoDB automatically lowercases and pluralizes model names
+          localField: "_id",
+          foreignField: "collection_id",
+          as: "bookmarks",
+        },
+      },
+      {
+        $addFields: {
+          count: { $size: "$bookmarks" },
+        },
+      },
+      {
+        $project: {
+          bookmarks: 0, // Strip out the heavy array, we only need the count
+        },
+      },
+      { $sort: { updated_at: -1 } },
+    ]);
   }
 
   static async deleteCollection(userId, collectionId) {
-    // TODO: In a production app, you'd also need to decide whether to
-    // delete child collections or move their bookmarks to the root.
     return await Collection.findOneAndDelete({
       _id: collectionId,
       user_id: userId,

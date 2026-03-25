@@ -21,3 +21,4 @@ EXPOSE 3000
 # By default, start the API server
 # We can override this command in docker-compose or AWS to run the worker instead
 CMD ["npm", "start"]
+
