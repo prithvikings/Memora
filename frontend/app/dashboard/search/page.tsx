@@ -8,6 +8,7 @@ import {
   CircleNotch,
   Robot,
   MagnifyingGlass,
+  ArrowUpRight,
 } from "@phosphor-icons/react";
 
 interface Bookmark {
@@ -51,99 +52,140 @@ export default function SearchPage({
       });
   }, [query]);
 
-  if (loading)
+  if (loading) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-3 text-gray-400">
-        <div className="relative">
-          <CircleNotch size={32} className="animate-spin text-[#00a870]" />
-          <Robot
-            size={14}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-emerald-700"
-          />
-        </div>
-        <p className="text-sm font-medium animate-pulse">
+      <div className="flex h-[60vh] flex-col items-center justify-center gap-4 text-gray-400 animate-in fade-in duration-300">
+        <CircleNotch size={32} className="animate-spin text-emerald-600" />
+        <p className="text-sm font-medium text-gray-500">
           Searching AI vectors for{" "}
-          <span className="text-gray-800 font-bold">"{query}"</span>...
+          <span className="text-gray-900 font-semibold">"{query}"</span>...
         </p>
       </div>
     );
+  }
 
   return (
-    <div className="max-w-5xl mx-auto pb-16">
-      <div className="mb-10">
-        <h1 className="text-[32px] font-bold text-gray-900 tracking-tight mb-2">
-          Search Results
-        </h1>
-        <p className="flex items-center gap-2 text-[15px] text-gray-500">
-          <Robot size={18} className="text-emerald-600" />
-          Showing AI semantic matches for{" "}
-          <span className="font-bold text-gray-800">"{query}"</span>
-        </p>
+    <div className="max-w-[1300px] mx-auto pb-16 px-6">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 py-6 border-b border-gray-200">
+        <div>
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-100 mb-4 shadow-sm">
+            <Robot size={14} weight="fill" className="text-emerald-600" />
+            <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">
+              AI Semantic Search
+            </span>
+          </div>
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
+            Search Results
+          </h1>
+          <p className="text-sm text-gray-500">
+            Showing semantic matches for{" "}
+            <span className="font-semibold text-gray-900">"{query}"</span>
+          </p>
+        </div>
       </div>
 
       {!query || results.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-24 px-4 bg-white border border-gray-200 rounded-3xl text-center shadow-sm">
-          <div className="bg-gray-50 p-5 rounded-full mb-5">
-            <MagnifyingGlass size={36} className="text-gray-400" />
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="flex flex-col items-center justify-center py-24 px-6 text-center bg-gray-50/50 border-2 border-dashed border-gray-200 rounded-2xl">
+            <div className="flex items-center justify-center w-14 h-14 mb-5 bg-white border border-gray-200 rounded-xl shadow-sm ring-4 ring-gray-50">
+              <MagnifyingGlass size={24} className="text-gray-400" />
+            </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+              No matches found
+            </h3>
+            <p className="text-sm text-gray-500 max-w-sm">
+              Try describing the concept differently. Our AI understands ideas
+              and topics, not just exact keywords.
+            </p>
           </div>
-          <h3 className="text-xl font-bold text-gray-900 mb-2">
-            No matches found
-          </h3>
-          <p className="text-[15px] text-gray-500 max-w-md">
-            Try describing the concept differently. Our AI understands ideas and
-            topics, not just exact keywords.
-          </p>
         </div>
       ) : (
         <div className="flex flex-col gap-5">
-          {results.map((bookmark) => (
-            <div
-              key={bookmark._id}
-              className="bg-white border border-gray-100 rounded-3xl p-7 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.03)] hover:shadow-[0_4px_24px_-4px_rgba(0,0,0,0.08)] transition-shadow duration-300 flex flex-col group relative"
-            >
-              <div className="flex justify-between items-start gap-8 mb-4">
-                <h3
-                  className="font-bold text-2xl text-gray-900 leading-snug group-hover:text-[#00a870] transition-colors"
-                  title={bookmark.title}
-                >
-                  {bookmark.title || "Untitled Document"}
-                </h3>
+          {results.map((bookmark) => {
+            // Safe domain parsing
+            let domain = bookmark.url;
+            try {
+              domain = new URL(bookmark.url).hostname.replace("www.", "");
+            } catch {}
 
-                <div className="flex flex-col items-end gap-2.5 min-w-[140px]">
+            return (
+              <div
+                key={bookmark._id}
+                className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all duration-200 flex flex-col group relative"
+              >
+                {/* Card Header */}
+                <div className="flex justify-between items-start gap-8 mb-3">
+                  <div>
+                    <a
+                      href={bookmark.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="font-semibold text-xl text-gray-900 leading-snug hover:text-emerald-600 transition-colors line-clamp-2 focus:outline-none focus-visible:underline"
+                      title={bookmark.title}
+                    >
+                      {bookmark.title || "Untitled Document"}
+                    </a>
+                    <div className="flex items-center gap-1.5 mt-1">
+                      <LinkIcon
+                        size={14}
+                        className="text-gray-400"
+                        weight="bold"
+                      />
+                      <span className="text-xs font-medium text-gray-500 truncate">
+                        {domain}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-2 shrink-0">
+                    <a
+                      href={bookmark.url}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="p-1.5 rounded-lg text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
+                      title="Visit source website"
+                    >
+                      <ArrowUpRight size={18} weight="bold" />
+                    </a>
+                  </div>
+                </div>
+
+                {/* Summary */}
+                <p className="text-sm text-gray-600 leading-relaxed mb-6 max-w-4xl">
+                  {bookmark.summary?.short || (
+                    <span className="italic text-gray-400">
+                      Waiting for AI processing...
+                    </span>
+                  )}
+                </p>
+
+                {/* Footer & Actions */}
+                <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100">
+                  <div className="flex flex-wrap gap-1.5">
+                    {bookmark.tags?.map((tag) => (
+                      <span
+                        key={tag}
+                        className="px-2 py-1 bg-gray-50 border border-gray-200 text-gray-600 text-xs font-medium rounded-md uppercase tracking-wider"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* Open Action (Matches Dashboard format) */}
                   <a
                     href={bookmark.url}
                     target="_blank"
                     rel="noreferrer"
-                    className="flex items-center gap-1.5 text-[12px] text-emerald-700 hover:text-emerald-900 truncate transition-colors font-medium group/link"
+                    className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium bg-emerald-50 text-emerald-700 hover:bg-emerald-600 hover:text-white rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 shrink-0"
                   >
-                    <LinkIcon
-                      size={14}
-                      weight="bold"
-                      className="text-emerald-600/70 group-hover/link:text-emerald-800"
-                    />
-                    {bookmark.url.replace(/^https?:\/\//, "").split("/")[0]}
+                    Open Link <ArrowUpRight size={14} weight="bold" />
                   </a>
                 </div>
               </div>
-
-              <p className="text-[15px] text-gray-600 leading-relaxed mb-8 max-w-4xl">
-                {bookmark.summary?.short || "Waiting for AI processing..."}
-              </p>
-
-              <div className="flex items-end justify-between mt-auto">
-                <div className="flex flex-wrap gap-2">
-                  {bookmark.tags?.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-3 py-1.5 bg-[#f0f4f8] text-[#4a5f78] text-[11px] font-semibold rounded-full uppercase tracking-wider"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
     </div>

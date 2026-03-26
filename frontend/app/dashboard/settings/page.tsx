@@ -139,10 +139,10 @@ export default function SettingsPage() {
     <div className="max-w-[1300px] mx-auto pb-16 font-poppins px-6">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 py-6 border-b border-gray-100">
         <div>
-          <h1 className="text-[36px] font-bold text-gray-950 tracking-tighter mb-2">
+          <h1 className="text-[32px] font-semibold text-gray-900 tracking-tight mb-2">
             Settings
           </h1>
-          <p className="text-gray-500 text-[16px] font-medium max-w-xl leading-relaxed">
+          <p className="text-gray-400 text-[15px] font-geist">
             Manage your account preferences, integrations, and billing.
           </p>
         </div>
@@ -150,24 +150,29 @@ export default function SettingsPage() {
 
       <div className="flex flex-col lg:flex-row gap-10">
         <aside className="w-full lg:w-64 shrink-0">
-          <nav className="flex flex-col gap-1.5">
+          <nav className="flex flex-col gap-1">
             {TABS.map((tab) => {
               const Icon = tab.icon;
               const isActive = activeTab === tab.id;
               return (
                 <button
                   key={tab.id}
+                  type="button"
                   onClick={() => setActiveTab(tab.id)}
-                  className={`flex items-center gap-3 w-full px-4 py-3 rounded-xl text-[14px] font-semibold transition-all duration-200 text-left ${
+                  className={`group flex items-center gap-3 w-full px-3 py-2.5 rounded-lg text-sm font-medium transition-colors text-left focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 cursor-pointer ${
                     isActive
-                      ? "bg-white text-gray-950 shadow-[0_2px_10px_rgba(0,0,0,0.03)] border border-gray-100/50"
-                      : "text-gray-500 hover:text-gray-900 hover:bg-gray-50 border border-transparent"
+                      ? "bg-emerald-50/80 text-emerald-900"
+                      : "text-gray-600 hover:text-gray-900 hover:bg-gray-100/60"
                   }`}
                 >
                   <Icon
-                    size={20}
+                    size={18}
                     weight={isActive ? "fill" : "regular"}
-                    className={isActive ? "text-emerald-600" : "text-gray-400"}
+                    className={`shrink-0 transition-colors ${
+                      isActive
+                        ? "text-emerald-600"
+                        : "text-gray-400 group-hover:text-gray-600"
+                    }`}
                   />
                   {tab.label}
                 </button>
@@ -191,17 +196,17 @@ export default function SettingsPage() {
                 </div>
               )}
 
-              <div className="bg-white border border-gray-100/70 rounded-[28px] p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)] mb-8">
-                <h2 className="text-xl font-bold text-gray-950 mb-1">
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm mb-8">
+                <h2 className="text-lg font-semibold text-gray-900 mb-1">
                   Personal Info
                 </h2>
-                <p className="text-[14px] text-gray-500 font-medium mb-8">
+                <p className="text-sm text-gray-500 mb-8">
                   Update your avatar and personal details here.
                 </p>
 
-                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8 pb-8 border-b border-gray-100">
+                <div className="flex flex-col sm:flex-row items-start sm:items-center gap-6 mb-8 pb-8 border-b border-gray-200">
                   <div className="relative shrink-0">
-                    <div className="w-24 h-24 rounded-full bg-emerald-50 border-4 border-white shadow-md flex items-center justify-center overflow-hidden">
+                    <div className="w-20 h-20 rounded-full border border-gray-200 bg-gray-50 flex items-center justify-center overflow-hidden shadow-sm">
                       {avatar ? (
                         <img
                           src={avatar}
@@ -215,52 +220,65 @@ export default function SettingsPage() {
                       )}
                     </div>
                   </div>
+
                   <div>
-                    <div className="flex items-center gap-3 mb-2">
+                    <div className="flex flex-wrap items-center gap-3 mb-2">
                       <button
+                        type="button"
                         onClick={handleGenerateAvatar}
-                        className="flex items-center gap-2 px-4 py-2 bg-gray-900 hover:bg-gray-800 text-white text-[13px] font-semibold rounded-xl transition-colors shadow-sm"
+                        className="relative flex items-center justify-center gap-2 px-4 py-2 bg-gray-900 text-white text-sm font-medium rounded-lg shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05),_inset_0px_1px_0px_0px_rgba(255,255,255,0.1)] ring-1 ring-inset ring-gray-950 hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 transition-all active:scale-[0.98]"
                       >
                         <ArrowsClockwise size={16} weight="bold" /> Generate
                         Avatar
                       </button>
+
                       <button
+                        type="button"
                         onClick={() => setAvatar("")}
-                        className="flex items-center gap-2 px-4 py-2 bg-white border border-gray-200 hover:bg-red-50 hover:text-red-600 hover:border-red-200 text-gray-600 text-[13px] font-semibold rounded-xl transition-colors"
+                        className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg shadow-sm hover:bg-red-50 hover:text-red-700 hover:border-red-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 transition-all active:scale-[0.98]"
                       >
                         <Trash size={16} /> Clear
                       </button>
                     </div>
-                    <p className="text-[12px] font-medium text-gray-400">
+                    <p className="text-xs text-gray-500">
                       Generated uniquely using DiceBear's Lorelei style.
                     </p>
                   </div>
                 </div>
 
-                <div className="flex flex-col gap-2 mb-6">
-                  <label className="text-[13px] font-bold text-gray-700">
+                <div className="flex flex-col gap-1.5 mb-6">
+                  <label
+                    htmlFor="fullName"
+                    className="text-sm font-medium text-gray-700"
+                  >
                     Full Name
                   </label>
                   <input
+                    id="fullName"
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 hover:border-gray-300 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl text-[14px] font-medium text-gray-900 outline-none transition-all"
+                    className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-shadow"
+                    placeholder="Enter your full name"
                   />
                 </div>
 
-                <div className="flex flex-col gap-2 mb-8">
-                  <label className="text-[13px] font-bold text-gray-700">
-                    Email Address (Read-only)
+                <div className="flex flex-col gap-1.5 mb-2">
+                  <label
+                    htmlFor="emailAddress"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Email Address
                   </label>
                   <div className="relative">
                     <input
+                      id="emailAddress"
                       type="email"
                       value={user?.email || ""}
                       disabled
-                      className="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-[14px] font-medium text-gray-500 outline-none cursor-not-allowed pr-12"
+                      className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-500 shadow-sm cursor-not-allowed pr-10 focus:outline-none"
                     />
-                    <div className="absolute inset-y-0 right-4 flex items-center pointer-events-none">
+                    <div className="absolute inset-y-0 right-3 flex items-center pointer-events-none">
                       <ShieldCheck
                         size={20}
                         className="text-gray-400"
@@ -268,29 +286,53 @@ export default function SettingsPage() {
                       />
                     </div>
                   </div>
+                  <p className="text-xs text-gray-500 mt-1">
+                    Your email address cannot be changed.
+                  </p>
                 </div>
               </div>
 
               <div className="flex items-center justify-end gap-3 pt-4">
                 <button
+                  type="button"
                   onClick={() => {
                     setName(user?.name || "");
                     setAvatar(user?.avatar || "");
                   }}
-                  className="px-5 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-[14px] font-semibold rounded-xl transition-colors"
+                  className="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg shadow-sm hover:bg-gray-50 hover:text-gray-900 hover:border-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-200 transition-all active:scale-[0.98]"
                 >
                   Discard Changes
                 </button>
+
                 <button
+                  type="button"
                   onClick={handleSaveProfile}
                   disabled={isSaving}
-                  className="w-[140px] flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[14px] font-semibold rounded-xl transition-all shadow-md shadow-emerald-600/20 active:scale-95 disabled:opacity-70 disabled:pointer-events-none"
+                  className="relative flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05),_inset_0px_1px_0px_0px_rgba(255,255,255,0.15)] ring-1 ring-inset ring-emerald-700 hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:ring-offset-2 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100"
                 >
                   {isSaving ? (
-                    <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                    <svg
+                      className="w-4 h-4 text-white/80 animate-spin"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                    >
+                      <circle
+                        className="opacity-25"
+                        cx="12"
+                        cy="12"
+                        r="10"
+                        stroke="currentColor"
+                        strokeWidth="4"
+                      ></circle>
+                      <path
+                        className="opacity-75"
+                        fill="currentColor"
+                        d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                      ></path>
+                    </svg>
                   ) : (
                     <>
-                      <Check size={18} weight="bold" /> Save Changes
+                      <Check size={16} weight="bold" /> Save Changes
                     </>
                   )}
                 </button>
@@ -302,26 +344,26 @@ export default function SettingsPage() {
           {activeTab === "account" && (
             <div className="animate-in fade-in slide-in-from-bottom-4 duration-300 flex flex-col gap-8">
               {/* Login Password Section */}
-              <div className="bg-white border border-gray-100/70 rounded-[28px] p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)]">
-                <h2 className="text-xl font-bold text-gray-950 mb-1">
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+                <h2 className="text-lg font-semibold text-gray-900 mb-1">
                   Login Password
                 </h2>
-                <p className="text-[14px] text-gray-500 font-medium mb-8">
+                <p className="text-sm text-gray-500 mb-8">
                   Manage your account authentication method.
                 </p>
 
                 {user?.auth_provider === "google" ? (
-                  <div className="p-5 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-4">
+                  <div className="p-4 bg-blue-50 border border-blue-100 rounded-xl flex items-start gap-3">
                     <ShieldCheck
-                      size={24}
+                      size={20}
                       weight="fill"
                       className="text-blue-500 shrink-0 mt-0.5"
                     />
                     <div>
-                      <h3 className="text-[14px] font-bold text-blue-900 mb-1">
+                      <h3 className="text-sm font-semibold text-blue-900 mb-1">
                         Managed by Google
                       </h3>
-                      <p className="text-[13px] text-blue-700">
+                      <p className="text-sm text-blue-700 max-w-lg">
                         You signed up using your Google account. Your
                         authentication is secured by Google, so you do not need
                         a local password.
@@ -331,19 +373,19 @@ export default function SettingsPage() {
                 ) : (
                   <form onSubmit={handlePasswordUpdate}>
                     {securityError && (
-                      <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm font-medium">
+                      <div className="mb-6 p-3 bg-red-50 border border-red-100 text-red-700 rounded-lg text-sm font-medium">
                         {securityError}
                       </div>
                     )}
                     {securitySuccess && (
-                      <div className="mb-4 p-3 bg-emerald-50 text-emerald-600 rounded-lg text-sm font-medium">
+                      <div className="mb-6 p-3 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-lg text-sm font-medium">
                         {securitySuccess}
                       </div>
                     )}
 
-                    <div className="flex flex-col gap-4 max-w-md">
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[13px] font-bold text-gray-700">
+                    <div className="flex flex-col gap-5 max-w-md">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-medium text-gray-700">
                           Current Password
                         </label>
                         <input
@@ -351,11 +393,12 @@ export default function SettingsPage() {
                           value={currentPassword}
                           onChange={(e) => setCurrentPassword(e.target.value)}
                           required
-                          className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl text-[14px] font-medium text-gray-900 outline-none transition-all"
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-shadow"
                         />
                       </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[13px] font-bold text-gray-700">
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-medium text-gray-700">
                           New Password
                         </label>
                         <input
@@ -364,11 +407,12 @@ export default function SettingsPage() {
                           onChange={(e) => setNewPassword(e.target.value)}
                           required
                           minLength={8}
-                          className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl text-[14px] font-medium text-gray-900 outline-none transition-all"
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-shadow"
                         />
                       </div>
-                      <div className="flex flex-col gap-2 mb-4">
-                        <label className="text-[13px] font-bold text-gray-700">
+
+                      <div className="flex flex-col gap-1.5 mb-2">
+                        <label className="text-sm font-medium text-gray-700">
                           Confirm New Password
                         </label>
                         <input
@@ -377,13 +421,14 @@ export default function SettingsPage() {
                           onChange={(e) => setConfirmPassword(e.target.value)}
                           required
                           minLength={8}
-                          className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl text-[14px] font-medium text-gray-900 outline-none transition-all"
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-shadow"
                         />
                       </div>
+
                       <button
                         type="submit"
                         disabled={isSavingSecurity}
-                        className="w-fit flex items-center justify-center gap-2 px-6 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-[14px] font-semibold rounded-xl transition-all shadow-sm disabled:opacity-70"
+                        className="relative w-fit flex items-center justify-center gap-2 px-5 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05),_inset_0px_1px_0px_0px_rgba(255,255,255,0.1)] ring-1 ring-inset ring-gray-950 hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100"
                       >
                         {isSavingSecurity ? "Updating..." : "Update Password"}
                       </button>
@@ -393,33 +438,33 @@ export default function SettingsPage() {
               </div>
 
               {/* Archive Security Section */}
-              <div className="bg-white border border-gray-100/70 rounded-[28px] p-8 shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)]">
-                <div className="flex items-center gap-3 mb-1">
+              <div className="bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm">
+                <div className="flex items-center gap-2 mb-1">
                   <Archive
-                    size={24}
+                    size={20}
                     weight="duotone"
-                    className="text-emerald-500"
+                    className="text-emerald-600"
                   />
-                  <h2 className="text-xl font-bold text-gray-950">
+                  <h2 className="text-lg font-semibold text-gray-900">
                     Archive Security
                   </h2>
                 </div>
-                <p className="text-[14px] text-gray-500 font-medium mb-8">
+                <p className="text-sm text-gray-500 mb-8">
                   Change the 4-digit PIN required to access your root archive.
                 </p>
 
                 {!user?.has_archive_pin ? (
-                  <div className="p-5 bg-amber-50 border border-amber-100 rounded-xl flex items-start gap-4">
+                  <div className="p-4 bg-amber-50 border border-amber-100 rounded-xl flex items-start gap-3">
                     <LockKey
-                      size={24}
+                      size={20}
                       weight="fill"
                       className="text-amber-500 shrink-0 mt-0.5"
                     />
                     <div>
-                      <h3 className="text-[14px] font-bold text-amber-900 mb-1">
+                      <h3 className="text-sm font-semibold text-amber-900 mb-1">
                         Archive is Unlocked
                       </h3>
-                      <p className="text-[13px] text-amber-700">
+                      <p className="text-sm text-amber-700 max-w-lg">
                         You have not set up a PIN for your archive yet. Navigate
                         to the Archive page to secure it.
                       </p>
@@ -428,19 +473,19 @@ export default function SettingsPage() {
                 ) : (
                   <form onSubmit={handlePinUpdate}>
                     {pinError && (
-                      <div className="mb-4 p-3 bg-red-50 text-red-600 rounded-lg text-sm font-medium">
+                      <div className="mb-6 p-3 bg-red-50 border border-red-100 text-red-700 rounded-lg text-sm font-medium">
                         {pinError}
                       </div>
                     )}
                     {pinSuccess && (
-                      <div className="mb-4 p-3 bg-emerald-50 text-emerald-600 rounded-lg text-sm font-medium">
+                      <div className="mb-6 p-3 bg-emerald-50 border border-emerald-100 text-emerald-700 rounded-lg text-sm font-medium">
                         {pinSuccess}
                       </div>
                     )}
 
-                    <div className="flex flex-col gap-4 max-w-md">
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[13px] font-bold text-gray-700">
+                    <div className="flex flex-col gap-5 max-w-md">
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-medium text-gray-700">
                           Current 4-Digit PIN
                         </label>
                         <input
@@ -451,11 +496,12 @@ export default function SettingsPage() {
                             setCurrentPin(e.target.value.replace(/\D/g, ""))
                           }
                           required
-                          className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl text-[14px] tracking-widest font-medium text-gray-900 outline-none transition-all"
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm tracking-widest text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-shadow font-mono"
                         />
                       </div>
-                      <div className="flex flex-col gap-2">
-                        <label className="text-[13px] font-bold text-gray-700">
+
+                      <div className="flex flex-col gap-1.5">
+                        <label className="text-sm font-medium text-gray-700">
                           New 4-Digit PIN
                         </label>
                         <input
@@ -466,11 +512,12 @@ export default function SettingsPage() {
                             setNewPin(e.target.value.replace(/\D/g, ""))
                           }
                           required
-                          className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl text-[14px] tracking-widest font-medium text-gray-900 outline-none transition-all"
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm tracking-widest text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-shadow font-mono"
                         />
                       </div>
-                      <div className="flex flex-col gap-2 mb-4">
-                        <label className="text-[13px] font-bold text-gray-700">
+
+                      <div className="flex flex-col gap-1.5 mb-2">
+                        <label className="text-sm font-medium text-gray-700">
                           Confirm New PIN
                         </label>
                         <input
@@ -481,9 +528,10 @@ export default function SettingsPage() {
                             setConfirmPin(e.target.value.replace(/\D/g, ""))
                           }
                           required
-                          className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl text-[14px] tracking-widest font-medium text-gray-900 outline-none transition-all"
+                          className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm tracking-widest text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:ring-2 focus:ring-emerald-600 focus:border-transparent transition-shadow font-mono"
                         />
                       </div>
+
                       <button
                         type="submit"
                         disabled={
@@ -492,7 +540,7 @@ export default function SettingsPage() {
                           newPin.length !== 4 ||
                           confirmPin.length !== 4
                         }
-                        className="w-fit flex items-center justify-center gap-2 px-6 py-2.5 bg-gray-900 hover:bg-gray-800 text-white text-[14px] font-semibold rounded-xl transition-all shadow-sm disabled:opacity-70"
+                        className="relative w-fit flex items-center justify-center gap-2 px-5 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-lg shadow-[0px_1px_2px_0px_rgba(0,0,0,0.05),_inset_0px_1px_0px_0px_rgba(255,255,255,0.1)] ring-1 ring-inset ring-gray-950 hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900 focus-visible:ring-offset-2 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100"
                       >
                         {isSavingPin ? "Updating..." : "Update Archive PIN"}
                       </button>
@@ -505,16 +553,23 @@ export default function SettingsPage() {
 
           {/* Under Construction Fallback */}
           {activeTab !== "profile" && activeTab !== "account" && (
-            <div className="flex flex-col items-center justify-center py-24 text-center animate-in fade-in duration-300">
-              <div className="p-4 bg-gray-50 rounded-full mb-4">
-                <Palette size={32} weight="duotone" className="text-gray-400" />
+            <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
+              <div className="flex flex-col items-center justify-center py-24 px-6 text-center bg-gray-50/50 border-2 border-dashed border-gray-200 rounded-2xl">
+                <div className="flex items-center justify-center w-14 h-14 mb-5 bg-white border border-gray-200 rounded-xl shadow-sm ring-4 ring-gray-50">
+                  <Palette
+                    size={24}
+                    weight="duotone"
+                    className="text-gray-400"
+                  />
+                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-1">
+                  {TABS.find((t) => t.id === activeTab)?.label || "Section"}
+                </h3>
+                <p className="text-sm text-gray-500 max-w-sm">
+                  This section is currently under construction. Check back later
+                  for updates.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-gray-900 mb-2">
-                {TABS.find((t) => t.id === activeTab)?.label}
-              </h3>
-              <p className="text-[14px] text-gray-500 font-medium">
-                This section is currently under construction.
-              </p>
             </div>
           )}
         </div>

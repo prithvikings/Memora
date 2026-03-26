@@ -101,8 +101,8 @@ export default function TrashPage() {
         "Are you sure you want to permanently delete this item? It cannot be recovered once destroyed.",
       confirmText: "Delete Forever",
       confirmStyle:
-        "bg-red-500 hover:bg-red-600 focus:ring-red-500/20 text-white",
-      iconStyle: "bg-red-100 text-red-600",
+        "bg-red-600 hover:bg-red-700 text-white shadow-sm focus:ring-red-600",
+      iconStyle: "bg-red-50 text-red-600 border border-red-100",
     });
   };
 
@@ -115,8 +115,8 @@ export default function TrashPage() {
       message: `Are you sure you want to permanently delete all ${trashItems.length} items? This action is irreversible.`,
       confirmText: "Empty Trash",
       confirmStyle:
-        "bg-red-500 hover:bg-red-600 focus:ring-red-500/20 text-white",
-      iconStyle: "bg-red-100 text-red-600",
+        "bg-red-600 hover:bg-red-700 text-white shadow-sm focus:ring-red-600",
+      iconStyle: "bg-red-50 text-red-600 border border-red-100",
     });
   };
 
@@ -145,25 +145,26 @@ export default function TrashPage() {
   if (loading) {
     return (
       <div className="flex h-[60vh] flex-col items-center justify-center gap-3 text-gray-400">
-        <CircleNotch size={28} className="animate-spin text-gray-400" />
+        <CircleNotch size={28} className="animate-spin text-emerald-600" />
       </div>
     );
   }
 
   return (
-    <div className="max-w-[1300px] mx-auto pb-16 font-poppins px-6">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 py-6 border-b border-gray-100">
+    <div className="max-w-[1300px] mx-auto pb-16 px-6">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 py-6 border-b border-gray-200">
         <div>
-          <div className="bg-gray-100 text-gray-600 w-fit px-3 py-1 rounded-full mb-3 flex items-center justify-center border border-gray-200">
-            <p className="uppercase tracking-widest font-bold text-[10px] flex items-center gap-1.5">
-              <Trash size={12} weight="bold" />
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-100 border border-gray-200 mb-4 shadow-sm">
+            <Trash size={14} weight="bold" className="text-gray-500" />
+            <span className="text-xs font-semibold text-gray-700 uppercase tracking-wider">
               System Trash
-            </p>
+            </span>
           </div>
-          <h1 className="text-[36px] font-bold text-gray-950 tracking-tighter mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
             Trash
           </h1>
-          <p className="text-gray-500 text-[16px] font-medium max-w-xl leading-relaxed">
+          <p className="text-sm text-gray-500">
             Items in the trash are automatically deleted forever after 30 days.
           </p>
         </div>
@@ -171,91 +172,95 @@ export default function TrashPage() {
         {trashItems.length > 0 && (
           <button
             onClick={promptEmptyTrash}
-            className="flex items-center gap-2 px-5 py-2.5 bg-white border border-red-200 text-red-600 hover:bg-red-50 rounded-xl text-[14px] font-semibold transition-all shadow-sm shrink-0"
+            className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-red-200 text-red-600 text-sm font-medium rounded-lg shadow-sm hover:bg-red-50 hover:text-red-700 hover:border-red-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 transition-all active:scale-[0.98] shrink-0"
           >
-            <Trash size={18} weight="bold" /> Empty Trash
+            <Trash size={16} weight="bold" /> Empty Trash
           </button>
         )}
       </div>
 
+      {/* Content Section */}
       {trashItems.length === 0 ? (
-        <div className="flex flex-col items-center justify-center py-32 px-4 bg-white border border-gray-100/70 rounded-[28px] text-center shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)]">
-          <div className="relative mb-6">
-            <div className="absolute inset-0 bg-emerald-100 rounded-full blur-xl opacity-50"></div>
-            <div className="relative p-6 bg-emerald-50 rounded-full border border-emerald-100">
+        <div className="animate-in fade-in slide-in-from-bottom-4 duration-300">
+          <div className="flex flex-col items-center justify-center py-24 px-6 text-center bg-gray-50/50 border-2 border-dashed border-gray-200 rounded-2xl">
+            <div className="flex items-center justify-center w-14 h-14 mb-5 bg-white border border-gray-200 rounded-xl shadow-sm ring-4 ring-gray-50">
               <CheckCircle
-                size={48}
+                size={24}
                 weight="fill"
                 className="text-emerald-500"
               />
             </div>
+            <h3 className="text-lg font-semibold text-gray-900 mb-1">
+              Your trash is empty
+            </h3>
+            <p className="text-sm text-gray-500 max-w-sm">
+              Nothing to see here. All clean and tidy.
+            </p>
           </div>
-          <h3 className="text-2xl font-bold text-gray-950 mb-2 tracking-tight">
-            Your trash is empty
-          </h3>
-          <p className="text-[15px] text-gray-500 max-w-md font-medium">
-            Nothing to see here. All clean and tidy.
-          </p>
         </div>
       ) : (
-        <div className="bg-white border border-gray-100/70 rounded-[28px] overflow-hidden shadow-[0_4px_20px_-4px_rgba(0,0,0,0.02)]">
-          <div className="grid grid-cols-12 gap-4 p-4 bg-gray-50/50 border-b border-gray-100 text-[11px] font-bold text-gray-400 uppercase tracking-widest">
-            <div className="col-span-12 sm:col-span-6 pl-4">Resource</div>
+        <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden shadow-sm">
+          {/* Table Header */}
+          <div className="grid grid-cols-12 gap-4 px-6 py-3 bg-gray-50 border-b border-gray-200 text-xs font-semibold text-gray-500 uppercase tracking-wider">
+            <div className="col-span-12 sm:col-span-6">Resource</div>
             <div className="hidden sm:block col-span-2">Deleted</div>
             <div className="hidden sm:block col-span-2">Time Remaining</div>
-            <div className="hidden sm:block col-span-2 text-right pr-4">
-              Actions
-            </div>
+            <div className="hidden sm:block col-span-2 text-right">Actions</div>
           </div>
 
-          <div className="flex flex-col divide-y divide-gray-100/70">
+          {/* Table Body */}
+          <div className="flex flex-col divide-y divide-gray-100">
             {trashItems.map((item) => {
               const expiry = getExpiryInfo(item.deleted_at);
               return (
                 <div
                   key={item._id}
-                  className="group grid grid-cols-12 gap-4 p-4 items-center hover:bg-gray-50/80 transition-colors duration-200"
+                  className="group grid grid-cols-12 gap-4 px-6 py-4 items-center hover:bg-gray-50 transition-colors duration-200"
                 >
-                  <div className="col-span-12 sm:col-span-6 pl-4 pr-4">
-                    <span className="block font-semibold text-[15px] text-gray-900 truncate mb-1 line-through opacity-70">
+                  {/* Resource Column */}
+                  <div className="col-span-12 sm:col-span-6 pr-4 min-w-0">
+                    <span className="block font-medium text-sm text-gray-900 truncate mb-0.5 line-through opacity-70">
                       {item.title || item.url}
                     </span>
-                    <p className="text-[12px] text-gray-400 font-medium flex items-center gap-1">
+                    <p className="text-xs text-gray-500 truncate">
                       {getDomain(item.url)}
                     </p>
                   </div>
 
-                  <div className="hidden sm:flex col-span-2 items-center text-[13px] font-medium text-gray-400">
+                  {/* Deleted Date Column */}
+                  <div className="hidden sm:flex col-span-2 items-center text-sm text-gray-500">
                     {new Date(item.deleted_at).toLocaleDateString()}
                   </div>
 
+                  {/* Time Remaining Column */}
                   <div className="hidden sm:flex col-span-2 items-center">
                     <span
-                      className={`flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[11px] font-bold uppercase tracking-wider ${
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium ${
                         expiry.isUrgent
-                          ? "bg-red-50 text-red-600 border border-red-100"
-                          : "bg-gray-100 text-gray-500"
+                          ? "bg-red-50 text-red-700 border border-red-100"
+                          : "bg-gray-100 text-gray-600"
                       }`}
                     >
                       <Clock size={14} weight="bold" /> {expiry.text}
                     </span>
                   </div>
 
-                  <div className="hidden sm:flex col-span-2 items-center justify-end gap-2 pr-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  {/* Actions Column */}
+                  <div className="hidden sm:flex col-span-2 items-center justify-end gap-2 opacity-0 group-hover:opacity-100 focus-within:opacity-100 transition-opacity">
                     <button
                       onClick={() => handleRestore(item._id)}
-                      className="flex items-center gap-1.5 px-3 py-2 text-[12px] font-bold text-gray-500 hover:text-emerald-700 hover:bg-emerald-50 rounded-xl transition-all"
+                      className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-gray-600 hover:text-emerald-700 hover:bg-emerald-50 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500"
                       title="Restore to Archive"
                     >
-                      <ArrowCounterClockwise size={16} weight="bold" /> Restore
+                      <ArrowCounterClockwise size={14} weight="bold" /> Restore
                     </button>
 
                     <button
                       onClick={() => promptDeleteSingle(item._id)}
-                      className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
+                      className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500"
                       title="Delete Permanently"
                     >
-                      <Trash size={18} weight="bold" />
+                      <Trash size={16} weight="bold" />
                     </button>
                   </div>
                 </div>
@@ -265,37 +270,38 @@ export default function TrashPage() {
         </div>
       )}
 
+      {/* Standardized Modal */}
       {modal.isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
           <div
-            className="absolute inset-0 bg-gray-900/30 backdrop-blur-sm animate-in fade-in duration-200"
+            className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm animate-in fade-in duration-200"
             onClick={closeModal}
           ></div>
-          <div className="relative bg-white w-full max-w-sm rounded-[24px] p-6 shadow-2xl animate-in zoom-in-95 fade-in duration-200 font-poppins">
+          <div className="relative w-full max-w-sm bg-white rounded-2xl p-6 shadow-xl animate-in zoom-in-95 fade-in duration-200">
             <div className="flex flex-col items-center text-center">
-              <div className={`p-4 rounded-full mb-4 ${modal.iconStyle}`}>
-                <Warning size={32} weight="fill" />
+              <div
+                className={`flex items-center justify-center w-12 h-12 rounded-full mb-4 shadow-sm ${modal.iconStyle}`}
+              >
+                <Warning size={24} weight="fill" />
               </div>
-              <h2 className="text-xl font-bold text-gray-900 mb-2 tracking-tight">
+              <h2 className="text-lg font-semibold text-gray-900 mb-2">
                 {modal.title}
               </h2>
-              <p className="text-[14px] text-gray-500 leading-relaxed mb-8">
-                {modal.message}
-              </p>
+              <p className="text-sm text-gray-500 mb-6">{modal.message}</p>
               <div className="flex w-full gap-3">
                 <button
                   onClick={closeModal}
-                  className="flex-1 px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-600 bg-gray-50 hover:bg-gray-100 transition-colors"
+                  className="flex-1 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 transition-colors"
                 >
                   Cancel
                 </button>
                 <button
                   onClick={confirmModalAction}
                   disabled={actionLoading}
-                  className={`flex-1 flex items-center justify-center px-4 py-2.5 rounded-xl text-[14px] font-semibold transition-all focus:outline-none disabled:opacity-70 ${modal.confirmStyle}`}
+                  className={`flex-1 flex items-center justify-center px-4 py-2 text-sm font-medium rounded-lg transition-all focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed ${modal.confirmStyle}`}
                 >
                   {actionLoading ? (
-                    <CircleNotch size={18} className="animate-spin" />
+                    <CircleNotch size={16} className="animate-spin" />
                   ) : (
                     modal.confirmText
                   )}

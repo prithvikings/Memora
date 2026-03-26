@@ -13,6 +13,7 @@ import {
   PencilSimple,
   Warning,
   X,
+  CircleNotch,
 } from "@phosphor-icons/react";
 import { useRouter } from "next/navigation";
 
@@ -47,7 +48,6 @@ export default function CollectionsPage() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // Unified Modal State
   const [modalState, setModalState] = useState<{
     type: ModalType;
     collectionId: string | null;
@@ -72,7 +72,6 @@ export default function CollectionsPage() {
     fetchCollections();
   }, []);
 
-  // CRITICAL FIX: Use mousedown and check for the container class
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       const target = e.target as Element;
@@ -146,23 +145,26 @@ export default function CollectionsPage() {
 
   if (isLoading) {
     return (
-      <div className="max-w-[1300px] mx-auto pb-16 pt-10 px-6 animate-pulse bg-gray-50/50 h-screen rounded-xl"></div>
+      <div className="flex h-[60vh] flex-col items-center justify-center gap-3 text-gray-400">
+        <CircleNotch size={28} className="animate-spin text-emerald-600" />
+      </div>
     );
   }
 
   return (
-    <div className="max-w-[1300px] mx-auto pb-16 font-poppins px-6 relative">
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12 py-6 border-b border-gray-100">
+    <div className="max-w-[1300px] mx-auto pb-16 px-6">
+      {/* Header Section */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 py-6 border-b border-gray-200">
         <div>
-          <div className="bg-emerald-50 text-emerald-700 w-fit px-3 py-1 rounded-full mb-3 flex items-center justify-center border border-emerald-100">
-            <p className="uppercase tracking-widest font-bold text-[10px]">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 border border-emerald-100 mb-4 shadow-sm">
+            <span className="text-xs font-semibold text-emerald-700 uppercase tracking-wider">
               Workspaces
-            </p>
+            </span>
           </div>
-          <h1 className="text-[36px] font-bold text-gray-950 tracking-tighter mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 tracking-tight mb-2">
             My Collections
           </h1>
-          <p className="text-gray-500 text-[16px] font-medium max-w-xl leading-relaxed">
+          <p className="text-sm text-gray-500">
             Organize your intellectual assets into specialized, AI-enhanced
             workspaces for focused research.
           </p>
@@ -170,35 +172,39 @@ export default function CollectionsPage() {
 
         <button
           onClick={(e) => triggerModal(e, "create")}
-          className="flex items-center gap-2.5 bg-gray-950 hover:bg-gray-800 text-white px-6 py-3 rounded-xl text-[14px] font-semibold transition-all shadow-lg hover:shadow-gray-950/20 hover:-translate-y-0.5 active:scale-95 shrink-0"
+          className="group flex shrink-0 items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 text-white text-sm font-medium rounded-lg shadow-[0px_1px_2px_0px_rgba(16,185,129,0.4),_inset_0px_1px_0px_0px_rgba(255,255,255,0.2)] ring-1 ring-inset ring-emerald-700 hover:bg-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 transition-all duration-200 active:scale-[0.98]"
         >
-          <Plus size={18} weight="bold" />
+          <Plus
+            size={16}
+            weight="bold"
+            className="transition-transform group-hover:rotate-90 duration-300"
+          />
           New Collection
         </button>
       </div>
 
       {error && (
-        <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-xl text-sm font-medium">
+        <div className="mb-8 p-4 bg-red-50 border border-red-100 text-red-700 rounded-lg text-sm font-medium">
           {error}
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {/* Grid Section */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Dynamic Collections */}
         {collections.map((collection) => (
           <div
             key={collection._id}
             onClick={() =>
               router.push(`/dashboard/collections/${collection._id}`)
             }
-            className="group relative bg-white border border-gray-100/70 rounded-[28px] p-8 shadow-[0_2px_12px_rgba(0,0,0,0.02)] hover:shadow-[0_20px_60px_-10px_rgba(0,0,0,0.1)] hover:-translate-y-1.5 transition-all duration-300 cursor-pointer flex flex-col overflow-hidden"
+            className="group relative bg-white border border-gray-200 rounded-2xl p-6 sm:p-8 shadow-sm hover:shadow-md hover:border-emerald-300 transition-all duration-300 cursor-pointer flex flex-col min-h-[220px]"
           >
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-white opacity-0 group-hover:opacity-100 transition-opacity duration-500 z-0"></div>
-
-            {/* CRITICAL FIX: Added kebab-menu-container class here */}
-            <div className="absolute top-6 right-6 z-20 kebab-menu-container">
+            {/* Kebab Menu */}
+            <div className="absolute top-4 right-4 z-20 kebab-menu-container">
               <button
                 onClick={(e) => openMenu(e, collection._id)}
-                className="p-2 text-gray-300 group-hover:text-gray-950 hover:bg-gray-100/80 rounded-full transition-all duration-300 opacity-100 lg:opacity-0 group-hover:opacity-100"
+                className="p-2 text-gray-400 group-hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-300"
               >
                 <DotsThree size={24} weight="bold" />
               </button>
@@ -206,19 +212,19 @@ export default function CollectionsPage() {
               {openMenuId === collection._id && (
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  className="absolute right-0 mt-2 w-40 bg-white border border-gray-100 shadow-xl rounded-xl overflow-hidden py-1 animate-in fade-in zoom-in-95 duration-200 origin-top-right"
+                  className="absolute right-0 top-full mt-1 w-40 bg-white border border-gray-200 shadow-lg rounded-xl overflow-hidden py-1.5 animate-in fade-in slide-in-from-top-2 duration-200 z-50"
                 >
                   <button
                     onClick={(e) =>
                       triggerModal(e, "rename", collection._id, collection.name)
                     }
-                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors"
+                    className="w-full flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-gray-900 transition-colors"
                   >
                     <PencilSimple size={16} /> Rename
                   </button>
                   <button
                     onClick={(e) => triggerModal(e, "delete", collection._id)}
-                    className="w-full flex items-center gap-2.5 px-4 py-2.5 text-sm font-medium text-red-600 hover:bg-red-50 hover:text-red-700 transition-colors"
+                    className="w-full flex items-center gap-2.5 px-4 py-2 text-sm font-medium text-red-600 hover:bg-red-50 transition-colors"
                   >
                     <Trash size={16} /> Delete
                   </button>
@@ -226,126 +232,130 @@ export default function CollectionsPage() {
               )}
             </div>
 
+            {/* Content */}
             <div className="relative z-10 flex flex-col h-full pointer-events-none">
-              <div className="flex items-center gap-4 mb-10">
-                <div className="relative">
-                  <div className="absolute -bottom-1 -right-1 w-full h-full rounded-2xl bg-gray-100 group-hover:bg-emerald-200 transition-colors"></div>
-                  <div className="relative p-4 bg-gray-50 rounded-2xl group-hover:bg-emerald-50 transition-colors duration-300">
-                    <FolderNotchIcon
-                      size={32}
-                      weight="fill"
-                      className="text-gray-300 group-hover:text-emerald-500 transition-colors duration-300"
-                    />
-                  </div>
+              <div className="mb-6">
+                <div className="inline-flex p-3 bg-gray-50 border border-gray-100 rounded-xl group-hover:bg-emerald-50 group-hover:border-emerald-100 transition-colors duration-300">
+                  <FolderNotchIcon
+                    size={28}
+                    weight="fill"
+                    className="text-gray-400 group-hover:text-emerald-500 transition-colors duration-300"
+                  />
                 </div>
               </div>
 
-              <h3 className="font-semibold text-[21px] text-gray-950 mb-4 group-hover:text-emerald-800 transition-colors leading-tight">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 group-hover:text-emerald-700 transition-colors line-clamp-2">
                 {collection.name}
               </h3>
 
-              <div className="mt-auto pt-6 border-t border-gray-100/70 flex items-center justify-between text-gray-400 group-hover:border-emerald-100 transition-colors">
-                <div className="flex items-center gap-4">
-                  <span className="flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-wider">
+              <div className="mt-auto pt-5 border-t border-gray-100 flex items-center justify-between text-gray-500 group-hover:border-emerald-100 transition-colors">
+                <div className="flex items-center gap-3 text-xs font-medium uppercase tracking-wider">
+                  <span className="flex items-center gap-1.5">
                     <BookmarkSimple
-                      size={15}
+                      size={14}
                       weight="bold"
-                      className="text-gray-300"
+                      className="text-gray-400 group-hover:text-emerald-400"
                     />
-                    {collection.count || 0} Items
+                    {collection.count || 0}
                   </span>
-                  <span className="w-1 h-1 rounded-full bg-gray-200"></span>
-                  <span className="flex items-center gap-1.5 text-[12px] font-bold uppercase tracking-wider">
-                    <ClockClockwise
-                      size={15}
-                      weight="bold"
-                      className="text-gray-300"
-                    />
+                  <span className="w-1 h-1 rounded-full bg-gray-300"></span>
+                  <span className="flex items-center gap-1.5 text-gray-400">
+                    <ClockClockwise size={14} weight="bold" />
                     {getRelativeTime(collection.updated_at)}
                   </span>
                 </div>
                 <ArrowRight
-                  size={18}
+                  size={16}
                   weight="bold"
-                  className="text-gray-300 group-hover:text-emerald-600 transition-all opacity-0 group-hover:opacity-100 translate-x-3 group-hover:translate-x-0"
+                  className="text-gray-300 group-hover:text-emerald-600 transition-all opacity-0 group-hover:opacity-100 -translate-x-2 group-hover:translate-x-0"
                 />
               </div>
             </div>
           </div>
         ))}
 
+        {/* Create Workspace CTA Card */}
         <div
           onClick={(e) => triggerModal(e, "create")}
-          className="group border-[2px] border-dashed border-gray-200 hover:border-emerald-300 rounded-[28px] p-8 flex flex-col items-center justify-center text-center min-h-[260px] hover:bg-emerald-50/50 transition-all duration-300 cursor-pointer shadow-[0_2px_12px_rgba(0,0,0,0.01)] hover:shadow-[0_20px_50px_-10px_rgba(0,0,0,0.04)]"
+          className="group flex flex-col items-center justify-center text-center p-8 border-2 border-dashed border-gray-200 rounded-2xl min-h-[220px] bg-gray-50/50 hover:bg-emerald-50/30 hover:border-emerald-300 transition-all duration-300 cursor-pointer"
         >
-          <div className="p-4 bg-gray-50 rounded-full mb-4 group-hover:bg-emerald-100 transition-colors duration-300 shadow-inner">
+          <div className="flex items-center justify-center w-14 h-14 mb-4 bg-white border border-gray-200 rounded-xl shadow-sm ring-4 ring-gray-50 group-hover:ring-emerald-50 transition-all duration-300">
             <Plus
-              size={28}
+              size={24}
               weight="bold"
-              className="text-gray-400 group-hover:text-emerald-600 transition-colors duration-300"
+              className="text-gray-400 group-hover:text-emerald-600 transition-colors"
             />
           </div>
-          <h3 className="font-semibold text-[16px] text-gray-700 group-hover:text-emerald-800 transition-colors mb-1">
+          <h3 className="text-base font-semibold text-gray-900 group-hover:text-emerald-700 transition-colors mb-1">
             New Workspace
           </h3>
-          <p className="text-[13px] text-gray-400 font-medium px-4 leading-relaxed group-hover:text-emerald-600/80">
+          <p className="text-sm text-gray-500 max-w-[200px]">
             Create a specialized folder to capture and synthesize knowledge.
           </p>
         </div>
       </div>
 
+      {/* Standardized Modal */}
       {modalState.type && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-950/20 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6">
           <div
-            className="bg-white rounded-[24px] w-full max-w-md shadow-2xl overflow-hidden animate-in zoom-in-95 duration-200"
+            className="absolute inset-0 bg-gray-900/40 backdrop-blur-sm animate-in fade-in duration-200"
+            onClick={closeModal}
+          ></div>
+          <div
+            className="relative w-full max-w-sm bg-white rounded-2xl shadow-xl animate-in zoom-in-95 fade-in duration-200 overflow-hidden"
             onClick={(e) => e.stopPropagation()}
           >
             {modalState.type === "delete" ? (
               <div className="p-6 text-center">
-                <div className="p-4 rounded-full bg-red-100 text-red-600 w-fit mx-auto mb-4">
-                  <Warning size={32} weight="fill" />
+                <div className="flex items-center justify-center w-12 h-12 mx-auto rounded-full bg-red-50 text-red-600 border border-red-100 mb-4 shadow-sm">
+                  <Warning size={24} weight="fill" />
                 </div>
-                <h2 className="text-xl font-bold text-gray-900 mb-2 tracking-tight">
+                <h2 className="text-lg font-semibold text-gray-900 mb-2">
                   Delete Workspace?
                 </h2>
-                <p className="text-[14px] text-gray-500 leading-relaxed mb-8">
+                <p className="text-sm text-gray-500 mb-6">
                   Are you sure you want to permanently delete this collection?
                   Bookmarks inside it will be moved to the root archive.
                 </p>
                 <div className="flex w-full gap-3">
                   <button
                     onClick={closeModal}
-                    className="flex-1 px-4 py-2.5 rounded-xl text-[14px] font-semibold text-gray-600 bg-gray-50 hover:bg-gray-100 transition-colors"
+                    className="flex-1 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={handleAction}
                     disabled={isProcessing}
-                    className="flex-1 px-4 py-2.5 rounded-xl text-[14px] font-semibold text-white bg-red-600 hover:bg-red-700 transition-all disabled:opacity-70"
+                    className="flex-1 flex items-center justify-center px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 transition-all disabled:opacity-60 disabled:cursor-not-allowed"
                   >
-                    {isProcessing ? "Deleting..." : "Delete"}
+                    {isProcessing ? (
+                      <CircleNotch size={16} className="animate-spin" />
+                    ) : (
+                      "Delete"
+                    )}
                   </button>
                 </div>
               </div>
             ) : (
               <>
-                <div className="flex items-center justify-between p-6 border-b border-gray-100">
-                  <h2 className="text-lg font-bold text-gray-950">
+                <div className="flex items-center justify-between px-6 py-4 border-b border-gray-100">
+                  <h2 className="text-base font-semibold text-gray-900">
                     {modalState.type === "create"
                       ? "Create New Collection"
                       : "Rename Collection"}
                   </h2>
                   <button
                     onClick={closeModal}
-                    className="p-2 text-gray-400 hover:bg-gray-100 rounded-full transition-colors"
+                    className="p-1.5 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-lg transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200"
                   >
-                    <X size={20} weight="bold" />
+                    <X size={18} weight="bold" />
                   </button>
                 </div>
                 <form onSubmit={handleAction} className="p-6">
-                  <div className="flex flex-col gap-2 mb-8">
-                    <label className="text-[13px] font-bold text-gray-700">
+                  <div className="mb-6 flex flex-col gap-1.5">
+                    <label className="text-sm font-medium text-gray-700">
                       Collection Name
                     </label>
                     <input
@@ -359,28 +369,31 @@ export default function CollectionsPage() {
                           inputValue: e.target.value,
                         })
                       }
-                      className="w-full px-4 py-3 bg-gray-50/50 border border-gray-200 focus:border-emerald-500 focus:bg-white focus:ring-4 focus:ring-emerald-500/10 rounded-xl text-[14px] font-medium text-gray-900 outline-none transition-all"
+                      className="w-full px-4 py-2.5 bg-white border border-gray-300 rounded-lg text-sm text-gray-900 placeholder-gray-400 shadow-sm focus:outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 transition-shadow"
                       required
                     />
                   </div>
-                  <div className="flex items-center justify-end gap-3">
+
+                  <div className="flex w-full gap-3">
                     <button
                       type="button"
                       onClick={closeModal}
-                      className="px-5 py-2.5 bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 text-[14px] font-semibold rounded-xl transition-colors"
+                      className="flex-1 px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-medium rounded-lg shadow-sm hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-200 transition-colors"
                     >
                       Cancel
                     </button>
                     <button
                       type="submit"
                       disabled={isProcessing}
-                      className="px-6 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white text-[14px] font-semibold rounded-xl transition-all shadow-md shadow-emerald-600/20 active:scale-95 disabled:opacity-70"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-medium rounded-lg shadow-[0px_1px_2px_0px_rgba(16,185,129,0.4),_inset_0px_1px_0px_0px_rgba(255,255,255,0.2)] ring-1 ring-inset ring-emerald-700 hover:bg-emerald-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-emerald-600 focus-visible:ring-offset-2 transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed disabled:active:scale-100"
                     >
-                      {isProcessing
-                        ? "Saving..."
-                        : modalState.type === "create"
-                          ? "Create Workspace"
-                          : "Rename Workspace"}
+                      {isProcessing ? (
+                        <CircleNotch size={16} className="animate-spin" />
+                      ) : modalState.type === "create" ? (
+                        "Create"
+                      ) : (
+                        "Rename"
+                      )}
                     </button>
                   </div>
                 </form>
