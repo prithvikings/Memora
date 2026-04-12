@@ -63,70 +63,68 @@ export const ExpandingServerRack = () => {
   );
 
   return (
-    <div className="flex flex-col items-center justify-center p-8 rounded-2xl bg-white border border-slate-200 shadow-sm shadow-inner w-fit mx-auto">
-      <motion.svg
-        whileHover="animate"
-        initial="initial"
-        className="isometric-stack w-[300px] h-[380px] overflow-visible"
-        viewBox="0 0 200 280"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <defs>
-          <linearGradient
-            id="topGradientRack"
-            x1="0%"
-            y1="0%"
-            x2="100%"
-            y2="100%"
+    <motion.svg
+      whileHover="animate"
+      initial="initial"
+      className="isometric-stack w-[300px] h-[380px] overflow-visible"
+      viewBox="0 0 200 280"
+      xmlns="http://www.w3.org/2000/svg"
+    >
+      <defs>
+        <linearGradient
+          id="topGradientRack"
+          x1="0%"
+          y1="0%"
+          x2="100%"
+          y2="100%"
+        >
+          <stop offset="0%" stopColor="#FFFFFF" stopOpacity={0.8} />
+          <stop offset="100%" stopColor="#F8FAFC" stopOpacity={0.8} />
+        </linearGradient>
+      </defs>
+
+      <g transform="translate(100, 100) scale(0.75)">
+        {/* Loop renders from bottom (3) to top (0) to ensure proper depth overlapping */}
+        {[3, 2, 1, 0].map((index) => (
+          <motion.g
+            key={index}
+            variants={{
+              animate: { y: bladeHeight * index + gapSize * index },
+              initial: { y: bladeHeight * index },
+            }}
+            transition={{
+              duration: 0.35,
+              delay: (3 - index) * 0.05, // Bottom drops first, creating a cascade
+              ease: "easeOut",
+            }}
           >
-            <stop offset="0%" stopColor="#FFFFFF" stopOpacity={0.8} />
-            <stop offset="100%" stopColor="#F8FAFC" stopOpacity={0.8} />
-          </linearGradient>
-        </defs>
+            <path
+              d={topPath}
+              fill="url(#topGradientRack)"
+              stroke={palette.stroke}
+              strokeWidth="1"
+            />
+            <path
+              d={sideRightPath}
+              fill={palette.fillSide}
+              stroke={palette.stroke}
+              strokeLinejoin="round"
+              strokeWidth="1.5"
+            />
+            <path
+              d={sideLeftPath}
+              fill={palette.fillSide}
+              stroke={palette.stroke}
+              strokeLinejoin="round"
+              strokeWidth="1.5"
+            />
 
-        <g transform="translate(100, 100)">
-          {/* Loop renders from bottom (3) to top (0) to ensure proper depth overlapping */}
-          {[3, 2, 1, 0].map((index) => (
-            <motion.g
-              key={index}
-              variants={{
-                animate: { y: bladeHeight * index + gapSize * index },
-                initial: { y: bladeHeight * index },
-              }}
-              transition={{
-                duration: 0.35,
-                delay: (3 - index) * 0.05, // Bottom drops first, creating a cascade
-                ease: "easeOut",
-              }}
-            >
-              <path
-                d={topPath}
-                fill="url(#topGradientRack)"
-                stroke={palette.stroke}
-                strokeWidth="1"
-              />
-              <path
-                d={sideRightPath}
-                fill={palette.fillSide}
-                stroke={palette.stroke}
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-              />
-              <path
-                d={sideLeftPath}
-                fill={palette.fillSide}
-                stroke={palette.stroke}
-                strokeLinejoin="round"
-                strokeWidth="1.5"
-              />
-
-              {/* Buttons pinned securely inside the blade */}
-              {renderStatusLights((3 - index) * 0.05 + 0.1)}
-            </motion.g>
-          ))}
-        </g>
-      </motion.svg>
-    </div>
+            {/* Buttons pinned securely inside the blade */}
+            {renderStatusLights((3 - index) * 0.05 + 0.1)}
+          </motion.g>
+        ))}
+      </g>
+    </motion.svg>
   );
 };
 
