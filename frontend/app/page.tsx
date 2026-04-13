@@ -49,9 +49,9 @@ const page = () => {
 
       {/* 3. REST OF THE PAGE */}
       <Powerful />
-      <div className="mt-36 text-3xl bg-neutral-100 w-full">
-        <Cleaner />
-      </div>
+
+      <Cleaner />
+
       <Built />
       <Join />
       <CalltoAction />
