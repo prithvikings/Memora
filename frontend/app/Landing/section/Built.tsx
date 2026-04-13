@@ -1,33 +1,28 @@
 "use client";
 import React from "react";
 import { motion, Variants } from "motion/react";
-import Check from "../image/check";
-import Tick from "../image/tick";
-import Developers from "../component/Developers";
-import Researchers from "../component/Researchers";
-import Students from "../component/Students";
-import Foundersc from "../component/Foundersc";
-import Designers from "../component/Designers";
 import Folder from "@/components/Folder";
+
 const Built = () => {
   return (
-    <div className="max-w-5xl mx-auto py-24 px-4 md:px-0">
-      <div className="flex items-center justify-center mb-16">
-        <h1 className="text-4xl md:text-4xl font-poppins text-center tracking-tight">
+    <div className="mx-auto max-w-5xl px-4 py-24 md:px-0">
+      <div className="mb-16 flex items-center justify-center">
+        <h1 className="font-poppins text-center text-4xl tracking-tight md:text-4xl">
           Built for people <br /> who live on the internet
         </h1>
       </div>
 
       {/* Grid Container */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-1 p-4">
+      <div className="grid grid-cols-1 gap-1 p-4 md:grid-cols-3">
         {/* Card 1: Real time messaging */}
         <motion.div
           initial="initial"
-          whileHover="hover"
-          className="border border-gray-200 rounded-3xl min-h-[350px] md:col-span-1 flex flex-col justify-between overflow-hidden bg-white cursor-pointer"
+          whileInView="animate"
+          viewport={{ once: true, margin: "-50px" }} // Triggers when scrolling into view
+          className="col-span-1 flex min-h-[350px] cursor-pointer flex-col justify-between overflow-hidden rounded-3xl border border-gray-200 bg-white md:col-span-1"
         >
           <ChatVisual />
-          <div className="flex flex-col items-start justify-center p-6 gap-2">
+          <div className="flex flex-col items-start justify-center gap-2 p-6">
             <h3 className="text-lg font-medium text-neutral-900">
               Real Time messaging
             </h3>
@@ -38,11 +33,11 @@ const Built = () => {
         </motion.div>
 
         {/* Card 2: Secure file sharing */}
-        <div className="group border border-gray-200 rounded-3xl min-h-[350px] md:col-span-1 flex flex-col justify-between overflow-hidden bg-white">
+        <div className="group col-span-1 flex min-h-[350px] flex-col justify-between overflow-hidden rounded-3xl border border-gray-200 bg-white md:col-span-1">
           {/* Our new custom visual */}
           <FileVisual />
 
-          <div className="flex flex-col items-start justify-center p-6 gap-2 mt-auto z-10 bg-white">
+          <div className="z-10 mt-auto flex flex-col items-start justify-center gap-2 bg-white p-6">
             <h3 className="text-lg font-medium text-neutral-900">
               Secure file sharing
             </h3>
@@ -53,9 +48,9 @@ const Built = () => {
         </div>
 
         {/* Card 3: Team collaboration */}
-        <div className="border border-gray-200 rounded-3xl min-h-[350px] md:col-span-1 md:row-span-2 flex flex-col justify-between overflow-hidden bg-white">
+        <div className="col-span-1 row-span-2 flex min-h-[350px] flex-col justify-between overflow-hidden rounded-3xl border border-gray-200 bg-white md:col-span-1 md:row-span-2">
           <CollabVisual />
-          <div className="flex flex-col items-start justify-center p-6 gap-2 mt-auto">
+          <div className="mt-auto flex flex-col items-start justify-center gap-2 p-6">
             <h3 className="text-lg font-medium text-neutral-900">
               Team collaboration
             </h3>
@@ -66,9 +61,9 @@ const Built = () => {
         </div>
 
         {/* Card 4: Loved by developers */}
-        <div className="border border-gray-200 rounded-3xl min-h-[350px] md:col-span-2 flex flex-col justify-between overflow-hidden bg-white">
+        <div className="col-span-2 flex min-h-[350px] flex-col justify-between overflow-hidden rounded-3xl border border-gray-200 bg-white md:col-span-2">
           <TestimonialVisual />
-          <div className="flex flex-col items-start justify-center p-6 gap-2 z-10 bg-white">
+          <div className="z-10 flex flex-col items-start justify-center gap-2 bg-white p-6">
             <h3 className="text-lg font-medium text-neutral-900">
               Loved by developers
             </h3>
@@ -87,13 +82,13 @@ export default Built;
 const FileVisual = () => {
   // 1. We create the custom item that goes INSIDE the folder
   const avatarCard = (
-    <div className="w-full h-full bg-gradient-to-b from-blue-400 to-blue-600 rounded-[8px] overflow-hidden relative shadow-inner flex flex-col justify-end items-center pb-0">
+    <div className="relative flex h-full w-full flex-col items-center justify-end overflow-hidden rounded-[8px] bg-gradient-to-b from-blue-400 to-blue-600 pb-0 shadow-inner">
       {/* Abstract Head */}
-      <div className="w-4 h-5 bg-[#fca5a5] rounded-t-full rounded-b-md z-10 mb-[-2px]" />
+      <div className="mb-[-2px] h-5 w-4 rounded-t-full rounded-b-md bg-[#fca5a5] z-10" />
       {/* Abstract Shoulders/Shirt */}
-      <div className="w-9 h-4 bg-[#1e293b] rounded-t-full z-10" />
+      <div className="h-4 w-9 rounded-t-full bg-[#1e293b] z-10" />
       {/* Subtle shine effect on the card */}
-      <div className="absolute inset-0 bg-gradient-to-tr from-transparent to-white/20 pointer-events-none" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-transparent to-white/20" />
     </div>
   );
 
@@ -106,17 +101,17 @@ const FileVisual = () => {
   ];
 
   return (
-    <div className="flex-1 w-full flex items-center justify-center relative min-h-[200px] px-8 overflow-hidden pointer-events-auto">
+    <div className="pointer-events-auto relative flex min-h-[200px] w-full flex-1 items-center justify-center overflow-hidden px-8">
       {/* ✨ NEW: Edge Fades for Premium Look ✨ */}
-      <div className="absolute inset-y-0 left-0 w-20 bg-gradient-to-r from-white to-transparent z-20 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-20 bg-gradient-to-l from-white to-transparent z-20 pointer-events-none" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-20 w-20 bg-gradient-to-r from-white to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-20 w-20 bg-gradient-to-l from-white to-transparent" />
       {/* --- BACKGROUND ELEMENTS --- */}
       {/* Animated Horizontal Dashed Lines */}
-      <div className="absolute inset-0 flex flex-col justify-center gap-[22px] pointer-events-none z-0 overflow-hidden">
+      <div className="pointer-events-none absolute inset-0 z-0 flex flex-col justify-center gap-[22px] overflow-hidden">
         {beamAnimations.map((anim, index) => (
-          <div key={index} className="relative w-full h-[1px]">
+          <div key={index} className="relative h-[1px] w-full">
             {/* The static dashed line */}
-            <div className="absolute inset-0 border-t border-dashed border-gray-400 opacity-40 w-11/12 mx-auto" />
+            <div className="absolute inset-0 mx-auto w-11/12 border-t border-dashed border-gray-400 opacity-40" />
 
             {/* The animated blue beam */}
             <motion.div
@@ -134,7 +129,7 @@ const FileVisual = () => {
       </div>
 
       {/* --- FOREGROUND ELEMENTS --- */}
-      <div className="flex items-center justify-between w-full max-w-[260px] z-10">
+      <div className="z-10 flex w-full max-w-[260px] items-center justify-between">
         {/* Left: The Interactive Folder */}
         <div className="relative pt-6">
           <Folder
@@ -146,25 +141,25 @@ const FileVisual = () => {
         </div>
 
         {/* Right: The UI Settings Panel */}
-        <div className="bg-neutral-100 backdrop-blur-sm border border-gray-200 shadow-xs rounded-xl py-2 px-2.5 flex flex-col gap-2 w-[90px] pointer-events-none relative z-10">
+        <div className="pointer-events-none relative z-10 flex w-[90px] flex-col gap-2 rounded-xl border border-gray-200 bg-neutral-100 px-2.5 py-2 shadow-xs backdrop-blur-sm">
           {/* Top Barcode Pill */}
-          <div className="border border-gray-200 rounded-sm p-2 flex justify-center items-center gap-1 h-4 bg-gray-50/50 shadow-xs">
-            <div className="w-[1.5px] h-3 bg-gray-700 rounded-full" />
-            <div className="w-[1.5px] h-3 bg-gray-700 rounded-full" />
-            <div className="w-[1.5px] h-3 bg-gray-700 rounded-full" />
-            <div className="w-[1.5px] h-3 bg-gray-700 rounded-full" />
-            <div className="w-[1.5px] h-3 bg-gray-700 rounded-full" />
+          <div className="flex h-4 items-center justify-center gap-1 rounded-sm border border-gray-200 bg-gray-50/50 p-2 shadow-xs">
+            <div className="h-3 w-[1.5px] rounded-full bg-gray-700" />
+            <div className="h-3 w-[1.5px] rounded-full bg-gray-700" />
+            <div className="h-3 w-[1.5px] rounded-full bg-gray-700" />
+            <div className="h-3 w-[1.5px] rounded-full bg-gray-700" />
+            <div className="h-3 w-[1.5px] rounded-full bg-gray-700" />
           </div>
 
           {/* Middle Input Skeleton */}
           <div className="flex flex-col gap-1">
-            <div className="border border-gray-200 rounded-sm h-7 flex items-center px-2.5 shadow-xs bg-white">
-              <div className="w-4 h-1 bg-gray-300 rounded-full" />
+            <div className="flex h-7 items-center rounded-sm border border-gray-200 bg-white px-2.5 shadow-xs">
+              <div className="h-1 w-4 rounded-full bg-gray-300" />
             </div>
 
             {/* Bottom Input Skeleton */}
-            <div className="border border-gray-200 rounded-sm h-7 flex items-center px-2.5 shadow-xs bg-white">
-              <div className="w-4 h-1 bg-gray-300 rounded-full" />
+            <div className="flex h-7 items-center rounded-sm border border-gray-200 bg-white px-2.5 shadow-xs">
+              <div className="h-1 w-4 rounded-full bg-gray-300" />
             </div>
           </div>
         </div>
@@ -188,10 +183,10 @@ const TestimonialVisual = () => {
 
   return (
     // ✨ Removed pointer-events-none here so individual cards can detect hover! ✨
-    <div className="relative flex-1 w-full flex items-center gap-4 overflow-hidden px-4 pt-8 pb-4">
+    <div className="relative flex w-full flex-1 items-center gap-4 overflow-hidden px-4 pb-4 pt-8">
       {/* Edge Fades: Added pointer-events-none specifically here so they don't block your mouse */}
-      <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white to-transparent z-30 pointer-events-none" />
-      <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-white to-transparent z-30 pointer-events-none" />
+      <div className="pointer-events-none absolute inset-y-0 left-0 z-30 w-12 bg-gradient-to-r from-white to-transparent" />
+      <div className="pointer-events-none absolute inset-y-0 right-0 z-30 w-24 bg-gradient-to-l from-white to-transparent" />
 
       {/* Testimonial 1 */}
       <div className="relative min-w-[200px]">
@@ -200,14 +195,14 @@ const TestimonialVisual = () => {
         <motion.div
           whileHover={hoverEffect}
           transition={springTransition}
-          className="relative w-full h-full border border-gray-200 rounded-xl p-4 bg-white z-20 "
+          className="relative z-20 h-full w-full rounded-xl border border-gray-200 bg-white p-4 "
         >
-          <p className="text-xs text-gray-600 mb-4 line-clamp-3">
+          <p className="mb-4 line-clamp-3 text-xs text-gray-600">
             Aceternity UI is the best UI library I have ever used. It is very
             easy to use and very customizable.
           </p>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-gray-200 rounded-full" />
+            <div className="h-6 w-6 rounded-full bg-gray-200" />
             <div>
               <p className="text-[10px] font-bold text-gray-900">Bill Gates</p>
               <p className="text-[9px] text-gray-500">CEO of Microsoft</p>
@@ -222,14 +217,14 @@ const TestimonialVisual = () => {
         <motion.div
           whileHover={hoverEffect}
           transition={springTransition}
-          className="relative w-full h-full border border-gray-200 rounded-xl p-4 bg-white z-20 "
+          className="relative z-20 h-full w-full rounded-xl border border-gray-200 bg-white p-4 "
         >
-          <p className="text-xs text-gray-600 mb-4 line-clamp-3">
+          <p className="mb-4 line-clamp-3 text-xs text-gray-600">
             The components are beautifully designed and saved us hundreds of
             hours of development time.
           </p>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-gray-200 rounded-full" />
+            <div className="h-6 w-6 rounded-full bg-gray-200" />
             <div>
               <p className="text-[10px] font-bold text-gray-900">Sarah Chen</p>
               <p className="text-[9px] text-gray-500">CTO at TechFlow</p>
@@ -244,14 +239,14 @@ const TestimonialVisual = () => {
         <motion.div
           whileHover={hoverEffect}
           transition={springTransition}
-          className="relative w-full h-full border border-gray-200 rounded-xl p-4 bg-white z-20 "
+          className="relative z-20 h-full w-full rounded-xl border border-gray-200 bg-white p-4 "
         >
-          <p className="text-xs text-gray-600 mb-4 line-clamp-3">
+          <p className="mb-4 line-clamp-3 text-xs text-gray-600">
             I've tried many UI libraries, but Aceternity stands out with its
             attention to detail.
           </p>
           <div className="flex items-center gap-2">
-            <div className="w-6 h-6 bg-gray-200 rounded-full" />
+            <div className="h-6 w-6 rounded-full bg-gray-200" />
             <div>
               <p className="text-[10px] font-bold text-gray-900">
                 Marcus Johnson
@@ -269,37 +264,37 @@ const TestimonialVisual = () => {
 
 const CollabVisual = () => {
   return (
-    <div className="flex-1 w-full flex items-center justify-center relative pointer-events-none p-6 pt-10">
+    <div className="pointer-events-none relative flex w-full flex-1 items-center justify-center p-6 pt-10">
       {/* Fake Editor Window (Stays exactly the same) */}
-      <div className="w-full max-w-[260px] bg-white border border-gray-200 shadow-sm rounded-xl overflow-hidden">
-        <div className="border-b border-gray-100 px-3 py-2.5 flex items-center gap-1.5">
-          <div className="w-2.5 h-2.5 rounded-full bg-[#FF5F56]" />
-          <div className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]" />
-          <div className="w-2.5 h-2.5 rounded-full bg-[#27C93F]" />
+      <div className="w-full max-w-[260px] overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="flex items-center gap-1.5 border-b border-gray-100 px-3 py-2.5">
+          <div className="h-2.5 w-2.5 rounded-full bg-[#FF5F56]" />
+          <div className="h-2.5 w-2.5 rounded-full bg-[#FFBD2E]" />
+          <div className="h-2.5 w-2.5 rounded-full bg-[#27C93F]" />
           <div className="ml-3 flex gap-1.5">
-            <div className="h-2 w-8 bg-gray-100 rounded-full" />
-            <div className="h-2 w-6 bg-gray-100 rounded-full" />
+            <div className="h-2 w-8 rounded-full bg-gray-100" />
+            <div className="h-2 w-6 rounded-full bg-gray-100" />
           </div>
         </div>
-        <div className="p-3 flex gap-3">
-          <div className="flex flex-col gap-[11px] text-[8px] text-gray-300 font-mono text-right select-none pt-0.5">
+        <div className="flex gap-3 p-3">
+          <div className="select-none pt-0.5 font-mono text-[8px] text-gray-300 flex flex-col gap-[11px] text-right">
             {Array.from({ length: 12 }).map((_, i) => (
               <span key={i}>{i + 1}</span>
             ))}
           </div>
-          <div className="flex flex-col gap-3 flex-1">
-            <div className="h-2 w-3/4 bg-[#D3A8FF] rounded-full" />
-            <div className="h-2 w-5/6 bg-gray-200 rounded-full" />
-            <div className="h-2 w-2/3 bg-[#79B6F2] rounded-full ml-4" />
-            <div className="h-2 w-1/2 bg-gray-200 rounded-full ml-4" />
-            <div className="h-2 w-1/2 bg-[#5EEAD4] rounded-full ml-4" />
-            <div className="h-2 w-4/5 bg-gray-200 rounded-full ml-4" />
-            <div className="h-2 w-1/4 bg-[#D3A8FF] rounded-full" />
-            <div className="h-2 w-3/4 bg-[#FCD34D] rounded-full" />
-            <div className="h-2 w-5/6 bg-gray-200 rounded-full ml-4" />
-            <div className="h-2 w-1/2 bg-[#79B6F2] rounded-full ml-4" />
-            <div className="h-2 w-1/3 bg-gray-200 rounded-full ml-4" />
-            <div className="h-2 w-1/6 bg-[#FCD34D] rounded-full" />
+          <div className="flex flex-1 flex-col gap-3">
+            <div className="h-2 w-3/4 rounded-full bg-[#D3A8FF]" />
+            <div className="h-2 w-5/6 rounded-full bg-gray-200" />
+            <div className="ml-4 h-2 w-2/3 rounded-full bg-[#79B6F2]" />
+            <div className="ml-4 h-2 w-1/2 rounded-full bg-gray-200" />
+            <div className="ml-4 h-2 w-1/2 rounded-full bg-[#5EEAD4]" />
+            <div className="ml-4 h-2 w-4/5 rounded-full bg-gray-200" />
+            <div className="h-2 w-1/4 rounded-full bg-[#D3A8FF]" />
+            <div className="h-2 w-3/4 rounded-full bg-[#FCD34D]" />
+            <div className="ml-4 h-2 w-5/6 rounded-full bg-gray-200" />
+            <div className="ml-4 h-2 w-1/2 rounded-full bg-[#79B6F2]" />
+            <div className="ml-4 h-2 w-1/3 rounded-full bg-gray-200" />
+            <div className="h-2 w-1/6 rounded-full bg-[#FCD34D]" />
           </div>
         </div>
       </div>
@@ -308,14 +303,14 @@ const CollabVisual = () => {
       <motion.div
         animate={{ x: [-10, -40, -20, -10], y: [0, -30, -10, 0] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-        className="absolute bottom-24 right-28 flex flex-col items-center z-20"
+        className="absolute bottom-24 right-28 z-20 flex flex-col items-center"
       >
         <svg
           width="20"
           height="20"
           viewBox="0 0 24 24"
           fill="none"
-          className="text-[#3B82F6] drop-shadow-md -ml-6"
+          className="-ml-6 text-[#3B82F6] drop-shadow-md"
         >
           <path
             d="M5.5 3L18.5 16L12.5 17L9.5 22L5.5 3Z"
@@ -324,8 +319,8 @@ const CollabVisual = () => {
             strokeWidth="2"
           />
         </svg>
-        <div className="bg-[#3B82F6] text-white text-[10px] font-medium pr-2.5 pl-1 py-1 rounded-full -mt-2 ml-10 shadow-lg flex items-center gap-1.5">
-          <div className="w-3.5 h-3.5 rounded-full bg-blue-200 flex items-center justify-center text-[7px] text-blue-700 font-bold">
+        <div className="-mt-2 ml-10 flex items-center gap-1.5 rounded-full bg-[#3B82F6] pl-1 pr-2.5 py-1 text-[10px] font-medium text-white shadow-lg">
+          <div className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-blue-200 text-[7px] font-bold text-blue-700">
             S
           </div>
           Sarah
@@ -341,14 +336,14 @@ const CollabVisual = () => {
           ease: "easeInOut",
           delay: 0.5,
         }}
-        className="absolute bottom-12 right-10 flex flex-col items-center z-20"
+        className="absolute bottom-12 right-10 z-20 flex flex-col items-center"
       >
         <svg
           width="20"
           height="20"
           viewBox="0 0 24 24"
           fill="none"
-          className="text-[#10B981] drop-shadow-md -ml-6"
+          className="-ml-6 text-[#10B981] drop-shadow-md"
         >
           <path
             d="M5.5 3L18.5 16L12.5 17L9.5 22L5.5 3Z"
@@ -357,8 +352,8 @@ const CollabVisual = () => {
             strokeWidth="2"
           />
         </svg>
-        <div className="bg-[#10B981] text-white text-[10px] font-medium pr-2.5 pl-1 py-1 rounded-full -mt-2 ml-8 shadow-lg flex items-center gap-1.5">
-          <div className="w-3.5 h-3.5 rounded-full bg-green-200 flex items-center justify-center text-[7px] text-green-700 font-bold">
+        <div className="-mt-2 ml-8 flex items-center gap-1.5 rounded-full bg-[#10B981] pl-1 pr-2.5 py-1 text-[10px] font-medium text-white shadow-lg">
+          <div className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-green-200 text-[7px] font-bold text-green-700">
             T
           </div>
           Tyler
@@ -382,7 +377,8 @@ const ChatVisual = () => {
       scale: 1,
       overflow: "hidden",
     },
-    hover: {
+    animate: {
+      // Changed from 'hover' to 'animate'
       opacity: 0,
       height: 0,
       marginTop: 0,
@@ -399,7 +395,8 @@ const ChatVisual = () => {
       scale: 1,
       overflow: "hidden",
     }, // 12px = mt-3
-    hover: {
+    animate: {
+      // Changed from 'hover' to 'animate'
       opacity: 0,
       height: 0,
       marginTop: 0,
@@ -417,7 +414,8 @@ const ChatVisual = () => {
       scale: 0.8,
       overflow: "hidden",
     },
-    hover: {
+    animate: {
+      // Changed from 'hover' to 'animate'
       opacity: 1,
       height: "auto",
       marginTop: 12,
@@ -434,7 +432,8 @@ const ChatVisual = () => {
       scale: 0.8,
       overflow: "hidden",
     },
-    hover: {
+    animate: {
+      // Changed from 'hover' to 'animate'
       opacity: 1,
       height: "auto",
       marginTop: 12,
@@ -444,22 +443,22 @@ const ChatVisual = () => {
   };
 
   return (
-    <div className="relative flex-1 w-full flex flex-col px-6 py-4 justify-center pointer-events-none overflow-hidden">
+    <div className="pointer-events-none relative flex w-full flex-1 flex-col justify-center overflow-hidden px-6 py-4">
       {/* Edge Fades for masking illusion */}
-      <div className="absolute inset-y-0 left-0 w-12 bg-gradient-to-r from-white to-transparent z-10" />
-      <div className="absolute inset-y-0 right-0 w-12 bg-gradient-to-l from-white to-transparent z-10" />
+      <div className="absolute inset-y-0 left-0 z-10 w-12 bg-gradient-to-r from-white to-transparent" />
+      <div className="absolute inset-y-0 right-0 z-10 w-12 bg-gradient-to-l from-white to-transparent" />
       {/* ✨ NEW: Top & Bottom fades to hide messages scrolling in/out ✨ */}
-      <div className="absolute inset-x-0 top-0 h-12 bg-gradient-to-b from-white to-transparent z-10" />
-      <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-white to-transparent z-10" />
+      <div className="absolute inset-x-0 top-0 z-10 h-12 bg-gradient-to-b from-white to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 z-10 h-12 bg-gradient-to-t from-white to-transparent" />
 
-      <div className="flex flex-col w-full z-0">
+      <div className="z-0 flex w-full flex-col">
         {/* --- MESSAGE 1 (Fades out first) --- */}
         <motion.div
           variants={oldMessage1}
-          className="flex gap-2 items-end origin-top"
+          className="origin-top flex items-end gap-2"
         >
-          <div className="w-6 h-6 rounded-full bg-blue-600 flex-shrink-0" />
-          <div className="border border-gray-200 text-xs px-2 py-1 rounded-lg shadow-2xs text-gray-800">
+          <div className="h-6 w-6 flex-shrink-0 rounded-full bg-blue-600" />
+          <div className="rounded-lg border border-gray-200 px-2 py-1 text-xs text-gray-800 shadow-2xs bg-zinc-100">
             Hey! Are you free for a quick call?
           </div>
         </motion.div>
@@ -467,37 +466,37 @@ const ChatVisual = () => {
         {/* --- MESSAGE 2 (Fades out second) --- */}
         <motion.div
           variants={oldMessage2}
-          className="flex gap-2 items-end justify-end origin-top"
+          className="origin-top flex items-end justify-end gap-2"
         >
-          <div className="border border-gray-200 text-xs px-2 py-1 rounded-lg shadow-2xs text-gray-800">
+          <div className="rounded-lg border border-gray-200 px-2 py-1 text-xs text-gray-800 shadow-2xs bg-zinc-100">
             Sure, give me 5 minutes!
           </div>
-          <div className="w-6 h-6 rounded-full bg-teal-500 flex-shrink-0" />
+          <div className="h-6 w-6 flex-shrink-0 rounded-full bg-teal-500" />
         </motion.div>
 
         {/* --- MESSAGE 3 (Always visible, slides up) --- */}
-        <div className="flex gap-2 items-end mt-3">
-          <div className="w-6 h-6 rounded-full bg-red-400 flex-shrink-0" />
-          <div className="border border-gray-200 text-xs px-2 py-1 rounded-lg shadow-2xs text-gray-800">
+        <div className="mt-3 flex items-end gap-2">
+          <div className="h-6 w-6 flex-shrink-0 rounded-full bg-red-400" />
+          <div className="rounded-lg border border-gray-200 px-2 py-1 text-xs text-gray-100 shadow-2xs bg-blue-400">
             Sounds good 👍
           </div>
         </div>
 
         {/* --- MESSAGE 4 (Always visible, slides up) --- */}
-        <div className="flex gap-2 items-end justify-end mt-3">
-          <div className="border border-gray-200 text-xs px-2 py-1 rounded-lg shadow-2xs text-gray-800">
+        <div className="mt-3 flex items-end justify-end gap-2">
+          <div className="rounded-lg border border-gray-200 px-2 py-1 text-xs text-gray-800 shadow-2xs bg-zinc-100">
             I'm not sure if I can make it.
           </div>
-          <div className="w-6 h-6 rounded-full bg-teal-500 flex-shrink-0" />
+          <div className="h-6 w-6 flex-shrink-0 rounded-full bg-teal-500" />
         </div>
 
         {/* --- MESSAGE 5 (Appears first) --- */}
         <motion.div
           variants={newMessage1}
-          className="flex gap-2 items-end origin-bottom-left"
+          className="origin-bottom-left flex items-end gap-2"
         >
-          <div className="w-6 h-6 rounded-full bg-red-400 flex-shrink-0" />
-          <div className="border border-gray-200 text-xs px-2 py-1 rounded-lg shadow-2xs text-gray-800">
+          <div className="h-6 w-6 flex-shrink-0 rounded-full bg-red-400" />
+          <div className="rounded-lg border border-gray-200 px-2 py-1 text-xs text-gray-100 bg-blue-400 shadow-2xs">
             No worries! Everything okay?
           </div>
         </motion.div>
@@ -505,12 +504,12 @@ const ChatVisual = () => {
         {/* --- MESSAGE 6 (Appears second) --- */}
         <motion.div
           variants={newMessage2}
-          className="flex gap-2 items-end justify-end origin-bottom-right"
+          className="origin-bottom-right flex items-end justify-end gap-2"
         >
-          <div className="border border-gray-200 text-xs px-2 py-1 rounded-lg shadow-2xs text-gray-800">
+          <div className="rounded-lg border border-gray-200 px-2 py-1 text-xs text-gray-800 bg-zinc-100 shadow-2xs">
             Yeah, just a bug to fix. 🐛
           </div>
-          <div className="w-6 h-6 rounded-full bg-teal-500 flex-shrink-0" />
+          <div className="h-6 w-6 flex-shrink-0 rounded-full bg-teal-500" />
         </motion.div>
       </div>
     </div>

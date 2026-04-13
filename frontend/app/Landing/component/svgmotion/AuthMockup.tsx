@@ -12,54 +12,19 @@ export const AuthCard = () => (
       <div className="mt-auto flex flex-1 items-center justify-center overflow-hidden pt-4">
         <div className="h-full w-full mask-b-from-50% p-4 md:p-8">
           <div className="relative">
-            <div
-              className="[--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] absolute left-[calc(var(--offset)/2*-1)] h-(--height) w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] bg-size-[var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),linear-gradient(black,black)] mask-exclude z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] top-0"
-              style={{
-                "--background": "#ffffff",
-                "--height": "1px",
-                "--width": "5px",
-                "--fade-stop": "90%",
-                "--offset": "40px",
-                maskComposite: "exclude",
-                WebkitMaskComposite: "destination-out",
-              }}
-            />
-            <div
-              className="[--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] absolute left-[calc(var(--offset)/2*-1)] h-(--height) w-[calc(100%+var(--offset))] bg-[linear-gradient(to_right,var(--color),var(--color)_50%,transparent_0,transparent)] bg-size-[var(--width)_var(--height)] [mask:linear-gradient(to_left,var(--background)_var(--fade-stop),transparent),linear-gradient(to_right,var(--background)_var(--fade-stop),transparent),linear-gradient(black,black)] mask-exclude z-30 dark:bg-[linear-gradient(to_right,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] top-auto bottom-0"
-              style={{
-                "--background": "#ffffff",
-                "--height": "1px",
-                "--width": "5px",
-                "--fade-stop": "90%",
-                "--offset": "40px",
-                maskComposite: "exclude",
-                WebkitMaskComposite: "destination-out",
-              }}
-            />
-            <div
-              className="[--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-(--width) bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] bg-size-[var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),linear-gradient(black,black)] mask-exclude z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] left-0"
-              style={{
-                "--background": "#ffffff",
-                "--height": "5px",
-                "--width": "1px",
-                "--fade-stop": "90%",
-                "--offset": "40px",
-                maskComposite: "exclude",
-                WebkitMaskComposite: "destination-out",
-              }}
-            />
-            <div
-              className="[--color-dark:var(--color-neutral-800)] [--color:var(--color-neutral-400)] absolute top-[calc(var(--offset)/2*-1)] h-[calc(100%+var(--offset))] w-(--width) bg-[linear-gradient(to_bottom,var(--color),var(--color)_50%,transparent_0,transparent)] bg-size-[var(--width)_var(--height)] [mask:linear-gradient(to_top,var(--background)_var(--fade-stop),transparent),linear-gradient(to_bottom,var(--background)_var(--fade-stop),transparent),linear-gradient(black,black)] mask-exclude z-30 dark:bg-[linear-gradient(to_bottom,var(--color-dark),var(--color-dark)_50%,transparent_0,transparent)] right-0 left-auto"
-              style={{
-                "--background": "#ffffff",
-                "--height": "5px",
-                "--width": "1px",
-                "--fade-stop": "90%",
-                "--offset": "40px",
-                maskComposite: "exclude",
-                WebkitMaskComposite: "destination-out",
-              }}
-            />
+            {/* --- ARCHITECTURAL DRAFTING LINES --- */}
+            {/* Top Line */}
+            <div className="pointer-events-none absolute -left-12 -right-12 top-0 h-[1px] border-t border-dashed border-neutral-400 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
+
+            {/* Bottom Line */}
+            <div className="pointer-events-none absolute -left-12 -right-12 bottom-0 h-[1px] border-t border-dashed border-neutral-300 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
+
+            {/* Left Line */}
+            <div className="pointer-events-none absolute -bottom-12 -top-12 left-0 w-[1px] border-l border-dashed border-neutral-300 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
+
+            {/* Right Line */}
+            <div className="pointer-events-none absolute -bottom-12 -top-12 right-0 w-[1px] border-l border-dashed border-neutral-300 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
+
             <div className="w-full px-6 py-6">
               <div className="flex flex-col items-center gap-4">
                 <a href="#" className="flex items-center gap-1.5">

@@ -1,99 +1,177 @@
 "use client";
-import React from 'react';
-import { motion, Variants } from 'motion/react';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+// 1. Extract data into an array (Added 3 extra mock testimonials for the second page)
+const testimonials = [
+  {
+    id: 1,
+    quote:
+      "What a fantastic AI Proactiv AI is, I just love it. It has completely transformed how I approach problems.",
+    name: "Manu Arora",
+    role: "Tech Innovator & Entrepreneur",
+    avatar: "https://assets.aceternity.com/avatars/manu.webp",
+  },
+  {
+    id: 2,
+    quote:
+      "I made a soap with the help of AI, it was so easy to use. Highly recommend it to anyone looking to create.",
+    name: "Tyler Durden",
+    role: "Creative Director & Business Owner",
+    avatar: "https://assets.aceternity.com/avatars/1.webp",
+  },
+  {
+    id: 3,
+    quote:
+      "This AI has transformed the way I work! It's like having a brilliant assistant who knows what I need.",
+    name: "Alice Johnson",
+    role: "Senior Software Engineer",
+    avatar: "https://assets.aceternity.com/avatars/2.webp",
+  },
+  {
+    id: 4,
+    quote:
+      "The workflow integrations saved us countless hours. Highly intuitive and beautifully designed.",
+    name: "Sarah Chen",
+    role: "Product Manager",
+    avatar: "https://assets.aceternity.com/avatars/8.webp",
+  },
+  {
+    id: 5,
+    quote:
+      "The interface is stunning. It feels like magic every time I use it. Best tool in our stack.",
+    name: "David Kim",
+    role: "UX Designer",
+    avatar: "https://assets.aceternity.com/avatars/3.webp",
+  },
+  {
+    id: 6,
+    quote:
+      "Generates ideas faster than I ever could manually. A total game changer for my daily workflow.",
+    name: "Emily Davis",
+    role: "Content Creator",
+    avatar: "https://assets.aceternity.com/avatars/4.webp",
+  },
+];
 
 const Join = () => {
-  const customEase = [0.22, 1, 0.36, 1] as const;
+  // 2. Add State for pagination
+  const [currentPage, setCurrentPage] = useState(0);
+  const itemsPerPage = 3;
+  const totalPages = Math.ceil(testimonials.length / itemsPerPage);
 
-  const containerVariants: Variants = {
-    hidden: { opacity: 0 },
-    show: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
+  // Handlers for navigation (Loops back around when reaching the end)
+  const handleNext = () => {
+    setCurrentPage((prev) => (prev + 1) % totalPages);
   };
 
-  const itemVariants: Variants = {
-    hidden: { opacity: 0, y: 30, filter: "blur(5px)" },
-    show: { 
-      opacity: 1, 
-      y: 0, 
-      filter: "blur(0px)",
-      transition: { duration: 0.8, ease: customEase } 
-    },
+  const handlePrev = () => {
+    setCurrentPage((prev) => (prev - 1 + totalPages) % totalPages);
   };
 
-  const cardVariants: Variants = {
-    hidden: { opacity: 0, y: 50, scale: 0.98, filter: "blur(8px)" },
-    show: { 
-      opacity: 1, 
-      y: 0, 
-      scale: 1,
-      filter: "blur(0px)",
-      transition: { duration: 1, ease: customEase } 
-    },
-  };
+  // Get the 3 testimonials for the current page
+  const currentTestimonials = testimonials.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage,
+  );
 
   return (
-    <div className='max-w-6xl mx-auto py-24 px-4 md:px-0'>
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        whileInView="show"
-        viewport={{ once: true, margin: "-100px" }}
-        className='flex flex-col gap-3'
-      >
-        <motion.h1 
-          variants={itemVariants} 
-          className='text-center text-4xl md:text-5xl font-poppins tracking-tight text-neutral-800'
-        >
-          Start turning your chaotic folders into AI memory
-        </motion.h1>
-        
-        <motion.p 
-          variants={itemVariants} 
-          className='text-center text-gray-500 font-medium'
-        >
-          <span className="text-green-600 bg-green-50 px-2 py-0.5 rounded-md mr-1">2,000+</span> 
-          creators on the waitlist
-        </motion.p>
+    <div className="mx-auto max-w-5xl px-4 py-24 pt-12 md:px-0">
+      <div className="flex w-full flex-col items-start gap-4">
+        <p className="font-mono text-lg tracking-wide text-neutral-900">
+          Testimonials
+        </p>
 
-        {/* The Testimonial Card */}
-        <motion.div 
-          variants={cardVariants}
-          className='mt-16 flex flex-col md:flex-row w-full rounded-3xl overflow-hidden shadow-sm border border-neutral-100'
-        >
-          {/* Left Side: The Quote */}
-          <div className='w-full md:w-1/2 bg-neutral-50 h-auto md:h-[450px] flex items-center justify-center p-8 md:p-16'>
-            <div className='flex flex-col gap-8'>
-              
-              {/* Subtle Quote Mark Icon */}
-              <svg className="w-10 h-10 text-neutral-300 mb-[-10px]" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+        {/* Heading and Navigation Arrows */}
+        <div className="flex w-full items-center justify-between">
+          <h1 className="font-poppins text-4xl font-medium text-zinc-800 md:text-5xl">
+            People love us, you know.
+          </h1>
+          <div className="hidden items-center gap-3 md:flex">
+            {/* Back Button */}
+            <button
+              onClick={handlePrev}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 transition-colors hover:bg-neutral-50 active:scale-95"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m15 18-6-6 6-6" />
               </svg>
-
-              <h1 className='text-2xl md:text-3xl font-medium leading-snug text-neutral-800'>
-                "This AI bookmark platform is a complete game changer. Instead of losing my links in messy folders, everything is neatly organized."
-              </h1>
-              
-              <div className='flex flex-col mt-4'>
-                <p className='text-neutral-800 font-semibold'>Elena Rodriguez</p>
-                <p className='text-sm text-gray-500'>Senior Engineer, GitHub (Pro User)</p>
-              </div>
-            </div>
+            </button>
+            {/* Forward Button */}
+            <button
+              onClick={handleNext}
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-neutral-200 bg-white text-neutral-600 transition-colors hover:bg-neutral-50 active:scale-95"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </button>
           </div>
-          
-          {/* Right Side: The Image/Placeholder */}
-          <div className='w-full md:w-1/2 bg-neutral-200 h-64 md:h-[450px] relative'>
-            {/* You can drop a Next.js <Image /> component in here later */}
-          </div>
-        </motion.div>
+        </div>
 
-      </motion.div>
+        {/* Testimonial Cards Grid wrapped in AnimatePresence */}
+        <div className="relative mt-8 w-full">
+          {/* mode="wait" ensures the old cards fade out before the new ones fade in */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              // The key forces React/Framer Motion to treat this as a completely new element when the page changes
+              key={currentPage}
+              // 3. The entry/exit blur animation states
+              initial={{ opacity: 0, filter: "blur(8px)", y: 10 }}
+              animate={{ opacity: 1, filter: "blur(0px)", y: 0 }}
+              exit={{ opacity: 0, filter: "blur(8px)", y: -10 }}
+              transition={{ duration: 0.4, ease: "easeInOut" }}
+              className="grid w-full grid-cols-1 gap-4 md:grid-cols-3"
+            >
+              {currentTestimonials.map((testimonial) => (
+                <div
+                  key={testimonial.id}
+                  className="flex flex-col justify-between rounded-xl border border-neutral-200 bg-white p-8 shadow-sm transition-shadow hover:shadow-md min-h-[300px]"
+                >
+                  <h3 className="font-sans text-xl tracking-tight text-neutral-700">
+                    {testimonial.quote}
+                  </h3>
+                  <div className="mt-12 flex items-center gap-4">
+                    <img
+                      src={testimonial.avatar}
+                      alt={testimonial.name}
+                      className="h-10 w-10 rounded-full object-cover"
+                    />
+                    <div className="flex flex-col">
+                      <span className="text-sm font-semibold text-neutral-900">
+                        {testimonial.name}
+                      </span>
+                      <span className="text-xs text-neutral-500">
+                        {testimonial.role}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </AnimatePresence>
+        </div>
+      </div>
     </div>
-  )
-}
+  );
+};
 
 export default Join;

@@ -2158,7 +2158,7 @@ export const MapCard = () => {
                   height="50"
                   viewBox="0 0 40 50"
                   fill="none"
-                  className="size-12 shadow-black/10 drop-shadow-sm dark:shadow-white/10"
+                  className="size-12 shadow-black/10 drop-shadow-sm dark:shadow-white/10 hover:scale-105 transition-all duration-300 ease-in-out"
                 >
                   <defs>
                     <clipPath id="avatar-clip-r27">
@@ -2206,7 +2206,7 @@ export const MapCard = () => {
                   height="50"
                   viewBox="0 0 40 50"
                   fill="none"
-                  className="size-12 shadow-black/10 drop-shadow-sm dark:shadow-white/10"
+                  className="size-12 shadow-black/10 drop-shadow-sm dark:shadow-white/10 hover:scale-105 transition-all duration-300 ease-in-out"
                 >
                   <defs>
                     <clipPath id="avatar-clip-r28">
@@ -2254,7 +2254,7 @@ export const MapCard = () => {
                   height="50"
                   viewBox="0 0 40 50"
                   fill="none"
-                  className="size-12 shadow-black/10 drop-shadow-sm dark:shadow-white/10"
+                  className="size-12 shadow-black/10 drop-shadow-sm dark:shadow-white/10  hover:scale-105 transition-all duration-300 ease-in-out"
                 >
                   <defs>
                     <clipPath id="avatar-clip-r29">
