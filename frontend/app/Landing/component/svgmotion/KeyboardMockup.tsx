@@ -3,10 +3,10 @@ export const KeyboardCard = () => (
     <div className="flex h-full flex-col">
       <div className="flex flex-col gap-2 p-6">
         <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
-          SDK available for everything
+          Search available everywhere 
         </h3>
         <p className="text-sm text-balance text-neutral-600 dark:text-neutral-400">
-          Native SDKs for every platform. React, Vue, iOS, Android, and more.
+          Native apps for every platform. Web, Mac, iOS, Android, and more.  
         </p>
       </div>
       <div className="mt-auto flex flex-1 items-center justify-center overflow-hidden mask-r-from-50% pt-4">

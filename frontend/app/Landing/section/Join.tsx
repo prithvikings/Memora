@@ -7,7 +7,7 @@ const testimonials = [
   {
     id: 1,
     quote:
-      "What a fantastic AI Proactiv AI is, I just love it. It has completely transformed how I approach problems.",
+      "What a fantastic tool Memora is, I just love it. It has completely transformed how I organize my thoughts.",
     name: "Manu Arora",
     role: "Tech Innovator & Entrepreneur",
     avatar: "https://assets.aceternity.com/avatars/manu.webp",
@@ -15,7 +15,7 @@ const testimonials = [
   {
     id: 2,
     quote:
-      "I made a soap with the help of AI, it was so easy to use. Highly recommend it to anyone looking to create.",
+      "I saved a book with the help of AI, it was so easy to use. Highly recommend it to anyone looking to learn.",
     name: "Tyler Durden",
     role: "Creative Director & Business Owner",
     avatar: "https://assets.aceternity.com/avatars/1.webp",
@@ -23,7 +23,7 @@ const testimonials = [
   {
     id: 3,
     quote:
-      "This AI has transformed the way I work! It's like having a brilliant assistant who knows what I need.",
+      "Memora has transformed the way I work! It's like having a brilliant brain that knows what I need. ",
     name: "Alice Johnson",
     role: "Senior Software Engineer",
     avatar: "https://assets.aceternity.com/avatars/2.webp",
@@ -31,7 +31,7 @@ const testimonials = [
   {
     id: 4,
     quote:
-      "The workflow integrations saved us countless hours. Highly intuitive and beautifully designed.",
+      "The knowledge system saved us countless hours. Highly intuitive and beautifully designed tool. ",
     name: "Sarah Chen",
     role: "Product Manager",
     avatar: "https://assets.aceternity.com/avatars/8.webp",
@@ -47,7 +47,7 @@ const testimonials = [
   {
     id: 6,
     quote:
-      "Generates ideas faster than I ever could manually. A total game changer for my daily workflow.",
+      "Organizes ideas faster than I ever could manually. A total game changer for my daily workflow.",
     name: "Emily Davis",
     role: "Content Creator",
     avatar: "https://assets.aceternity.com/avatars/4.webp",

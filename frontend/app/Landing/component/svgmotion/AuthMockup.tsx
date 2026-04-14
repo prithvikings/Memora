@@ -3,10 +3,10 @@ export const AuthCard = () => (
     <div className="flex h-full flex-col">
       <div className="flex flex-col gap-2 p-6">
         <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
-          Easy auth setup
+          Quick save tool 
         </h3>
         <p className="text-sm text-balance text-neutral-600 dark:text-neutral-400">
-          Get started in minutes with our simple authentication flow.
+          Save any webpage in seconds with our automated AI summary. 
         </p>
       </div>
       <div className="mt-auto flex flex-1 items-center justify-center overflow-hidden pt-4">
@@ -14,16 +14,16 @@ export const AuthCard = () => (
           <div className="relative">
             {/* --- ARCHITECTURAL DRAFTING LINES --- */}
             {/* Top Line */}
-            <div className="pointer-events-none absolute -left-12 -right-12 top-0 h-[1px] border-t border-dashed border-neutral-400 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
+            <div className="pointer-events-none absolute -left-12 -right-12 top-0 h-px border-t border-dashed border-neutral-400 mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
 
             {/* Bottom Line */}
-            <div className="pointer-events-none absolute -left-12 -right-12 bottom-0 h-[1px] border-t border-dashed border-neutral-300 [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
+            <div className="pointer-events-none absolute -left-12 -right-12 bottom-0 h-px border-t border-dashed border-neutral-300 mask-[linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
 
             {/* Left Line */}
-            <div className="pointer-events-none absolute -bottom-12 -top-12 left-0 w-[1px] border-l border-dashed border-neutral-300 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
+            <div className="pointer-events-none absolute -bottom-12 -top-12 left-0 w-px border-l border-dashed border-neutral-300 mask-[linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
 
             {/* Right Line */}
-            <div className="pointer-events-none absolute -bottom-12 -top-12 right-0 w-[1px] border-l border-dashed border-neutral-300 [mask-image:linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
+            <div className="pointer-events-none absolute -bottom-12 -top-12 right-0 w-px border-l border-dashed border-neutral-300 mask-[linear-gradient(to_bottom,transparent,black_10%,black_90%,transparent)] dark:border-neutral-700" />
 
             <div className="w-full px-6 py-6">
               <div className="flex flex-col items-center gap-4">
@@ -37,7 +37,7 @@ export const AuthCard = () => (
                     />
                   </div>
                   <span className="text-xs font-semibold text-neutral-900 dark:text-white">
-                    Nexus
+                    Brain
                   </span>
                 </a>
                 <div className="flex w-full flex-col gap-3">
@@ -168,10 +168,10 @@ export const AuthCard = () => (
                 </div>
                 <div className="mt-2 w-full rounded-xl bg-white p-4 shadow-lg ring-1 ring-black/5 dark:bg-neutral-800 dark:ring-white/10">
                   <p className="text-xs leading-relaxed text-neutral-600 dark:text-neutral-300">
-                    “Setting up auth took us 10 minutes instead of 2 weeks. The
-                    SDK just works out of the box with zero configuration. Our
-                    team shipped the entire login flow before lunch. Best
-                    developer experience we've had.”
+                    “Organizing links took us minutes instead of weeks. The
+                    AI just works out of the box with zero configuration. Our
+                    team saved the entire research project before lunch. Best
+                    memory experience we've had. ”
                   </p>
                   <div className="mt-3 flex items-center gap-2">
                     <img

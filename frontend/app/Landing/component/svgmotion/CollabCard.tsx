@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "motion/react";
+import { motion, Variants } from "motion/react";
 
 export const CollabCard = () => {
   // Pre-calculated random-feeling delays and durations for the 7 beams
@@ -15,7 +15,7 @@ export const CollabCard = () => {
   ];
 
   // Variants for staggered chat bubble entrances
-  const containerVariants = {
+  const containerVariants: Variants = {
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
@@ -23,7 +23,7 @@ export const CollabCard = () => {
     },
   };
 
-  const bubbleVariants = {
+  const bubbleVariants: Variants = {
     hidden: { opacity: 0, y: 20 },
     visible: {
       opacity: 1,
@@ -37,11 +37,11 @@ export const CollabCard = () => {
       <div className="flex h-full flex-col">
         <div className="flex flex-col gap-2 p-6">
           <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
-            Real-time collaboration
+            Intelligent organizing
           </h3>
           <p className="text-sm text-balance text-neutral-600 dark:text-neutral-400">
-            Connect with your team instantly. AI-powered insights help you work
-            smarter together.
+            Connect with your mind instantly. AI-powered summaries help you
+            learn faster today!
           </p>
         </div>
         <div className="mt-auto flex flex-1 flex-col items-center justify-between gap-2 overflow-hidden pt-4">
@@ -64,7 +64,7 @@ export const CollabCard = () => {
                   src="https://assets.aceternity.com/avatars/1.webp"
                 />
                 <div className="rounded-xl bg-blue-400 px-3 py-2 text-sm text-neutral-100 shadow-sm ring-1 shadow-black/5 ring-black/5 dark:bg-neutral-800 dark:text-neutral-200">
-                  Workflow completed. 847 tasks processed.
+                  Summary completed. 124 links organized.
                 </div>
               </motion.div>
 
@@ -78,7 +78,7 @@ export const CollabCard = () => {
                   src="https://assets.aceternity.com/avatars/manu.webp"
                 />
                 <div className="rounded-xl bg-zinc-100 px-3 py-2 text-sm text-neutral-700 shadow-sm ring-1 shadow-black/5 ring-black/5 dark:bg-neutral-800 dark:text-neutral-200">
-                  Deploy to production
+                  Save to memory hub
                 </div>
               </motion.div>
 
@@ -92,7 +92,7 @@ export const CollabCard = () => {
                   src="https://assets.aceternity.com/avatars/8.webp"
                 />
                 <div className="rounded-xl bg-blue-400 px-3 py-2 text-sm text-neutral-100 shadow-sm ring-1 shadow-black/5 ring-black/5 dark:bg-neutral-800 dark:text-neutral-200">
-                  Deployed. All systems operational.
+                  Stored. Your knowledge is ready.
                 </div>
               </motion.div>
             </motion.div>
@@ -107,7 +107,7 @@ export const CollabCard = () => {
               <div key={index} className="relative h-full w-px">
                 <div className="absolute inset-0 border-l border-dashed border-neutral-300 dark:border-neutral-600" />
                 <motion.div
-                  className="absolute left-0 h-12 w-px bg-gradient-to-b from-transparent via-blue-500 to-transparent"
+                  className="absolute left-0 h-12 w-px bg-linear-to-b from-transparent via-blue-500 to-transparent"
                   initial={{ y: "-100%", opacity: 0 }}
                   animate={{
                     y: "400%", // Moves it all the way down
@@ -168,7 +168,7 @@ export const CollabCard = () => {
 
                     {/* Animated Scanning Line */}
                     <motion.div
-                      className="absolute bottom-0 top-0 w-px bg-gradient-to-b from-transparent via-sky-500 to-transparent"
+                      className="absolute bottom-0 top-0 w-px bg-linear-to-b from-transparent via-sky-500 to-transparent"
                       style={{
                         boxShadow:
                           "rgba(59, 130, 246, 0.9) 0px 0px 20px, rgba(99, 102, 241, 0.7) 0px 0px 40px, rgba(139, 92, 246, 0.5) 0px 0px 60px",

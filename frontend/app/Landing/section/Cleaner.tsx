@@ -15,10 +15,10 @@ const Cleaner = () => {
       {/* Top Header */}
       <div className="flex flex-col items-start gap-2">
         <h1 className="text-5xl font-medium tracking-tight text-neutral-800 font-poppins">
-          Autonomous AI workflow features
+          Intelligent AI memory features 
         </h1>
         <p className="text-lg font-medium tracking-tight text-neutral-600">
-          From prototype to production, autonomously
+          From scattered links to order, instantly  
         </p>
       </div>
       <div className="mx-auto mt-8 grid grid-cols-1 gap-4 md:mt-12 md:grid-cols-3 md:grid-rows-2">
@@ -33,33 +33,28 @@ const Cleaner = () => {
         <div className="flex flex-col gap-2">
           <LightningIcon size={24} />
           <h1 className="text-md font-medium tracking-tight text-neutral-800 font-poppins">
-            Lightning-fast deployments
+            Lightning-fast searching  
           </h1>
           <p className="text-neutral-500 text-start text-xs mb-6 leading-relaxed">
-            Push to production in seconds. <br /> Our CI/CD pipeline handles
-            builds, <br />
-            tests, and rollbacks automatically.
+            Search memories in seconds. Our AI engine handles summaries, tags, and organization automatically. 
           </p>
         </div>
         <div className=" flex flex-col gap-2">
           <ChartBarIcon size={24} />
           <h1 className="text-md font-medium tracking-tight text-neutral-800 font-poppins">
-            Built-in analytics
+            Built-in summaries
           </h1>
           <p className="text-neutral-500 text-start text-xs mb-6 leading-relaxed">
-            Track user behavior, monitor <br /> performance, and gain actionable{" "}
-            <br />
-            insights without third-party tools.
+            Track your readings, monitor interests, and gain actionable insights without any manual effort.  
           </p>
         </div>
         <div className="flex flex-col gap-2">
           <PuzzlePieceIcon size={24} />
           <h1 className="text-md font-medium tracking-tight text-neutral-800 font-poppins">
-            Seamless integrations
+            Seamless connections  
           </h1>
           <p className="text-neutral-500 text-start text-xs mb-6 leading-relaxed">
-            Connect with your existing <br /> stack. Slack, GitHub, Jira, and{" "}
-            <br /> 100+ integrations out of the box.
+            Connect with your digital life. Notes, Tweets, Links, and everything in your second brain.    
           </p>
         </div>
       </div>

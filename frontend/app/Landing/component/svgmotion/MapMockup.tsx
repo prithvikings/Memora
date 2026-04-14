@@ -2114,11 +2114,10 @@ export const MapCard = () => {
       <div className="flex h-full flex-col">
         <div className="flex flex-col gap-2 p-6">
           <h3 className="text-sm font-semibold text-neutral-900 dark:text-white">
-            You're secure, everywhere
+            Memora works everywhere   
           </h3>
           <p className="text-sm text-balance text-neutral-600 dark:text-neutral-400">
-            Enterprise-grade security that follows your users across the globe.
-            Built-in encryption, compliance, and monitoring.
+            World-class intelligence that follows your memories across the globe. Built-in summaries, tagging, and organization.
           </p>
         </div>
         <div className="mt-auto flex flex-1 items-center justify-center pt-4">
